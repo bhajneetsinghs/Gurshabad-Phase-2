@@ -1,26 +1,9 @@
-// src/pages/SearchResults.jsx
-// Route: /search?q=...&type=1|2
-// BaniDB search response: { resultsInfo: { totalResults }, verses: [...] }
-
 import { useEffect, useState } from 'react';
 import { useSearchParams, useNavigate, Link } from 'react-router-dom';
-import { parseVerseItem } from '../services/gurbaniApi';
+import { searchRaw, parseVerseItem } from '../services/gurbaniApi';
 
 const GURBANI_FONT = "'Noto Sans Gurmukhi','Gurmukhi MN','Kohinoor Gurmukhi',sans-serif";
-
-function apiUrl(type, q) {
-    if (type === '1') return `/api/banidb/search/first-letter?q=${encodeURIComponent(q)}`;
-    return `/api/banidb/search/full-word?q=${encodeURIComponent(q)}`;
-}
-
-// ✅ Primary key is data.verses[]
-function extractVerses(data) {
-    if (Array.isArray(data?.verses) && data.verses.length > 0) return data.verses;
-    if (Array.isArray(data?.results) && data.results.length > 0) return data.results;
-    if (Array.isArray(data?.lines) && data.lines.length > 0) return data.lines;
-    if (Array.isArray(data)) return data;
-    return [];
-}
+const UI_FONT = 'system-ui,-apple-system,sans-serif';
 
 export default function SearchResults() {
     const [searchParams] = useSearchParams();
@@ -30,7 +13,7 @@ export default function SearchResults() {
     const type = (searchParams.get('type') || '2').toString();
 
     const [results, setResults] = useState([]);
-    const [totalResults, setTotalResults] = useState(null);
+    const [total, setTotal] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
@@ -39,24 +22,17 @@ export default function SearchResults() {
         setLoading(true);
         setError(null);
 
-        fetch(apiUrl(type, q), { headers: { Accept: 'application/json' } })
-            .then((r) => {
-                if (!r.ok) throw new Error(`HTTP ${r.status}`);
-                return r.json();
-            })
-            .then((data) => {
-                // Capture total from resultsInfo if present
-                if (data?.resultsInfo?.totalResults != null) {
-                    setTotalResults(data.resultsInfo.totalResults);
-                }
-                setResults(extractVerses(data));
+        searchRaw(type, q)
+            .then(({ verses, total }) => {
+                setResults(verses);
+                setTotal(total);
             })
             .catch((err) => setError(err.message))
             .finally(() => setLoading(false));
     }, [q, type]);
 
-    const typeLabel = type === '1' ? 'First Letter' : 'Full Word';
-    const count = totalResults ?? results.length;
+    const typeLabel = { '1': 'First Letter', '2': 'Full Word', '4': 'Romanized' }[type] ?? 'Search';
+    const count = total ?? results.length;
 
     return (
         <div className="max-w-[min(980px,92vw)] mx-auto px-4 pb-16 pt-6">
@@ -66,25 +42,44 @@ export default function SearchResults() {
                 <Link
                     to="/"
                     className="inline-flex items-center gap-1.5 text-white/40
-                     hover:text-white/70 text-sm mb-4 transition-colors"
-                    style={{ fontFamily: 'system-ui,sans-serif' }}
+                     hover:text-white/70 text-sm mb-5 transition-colors"
+                    style={{ fontFamily: UI_FONT }}
                 >
                     ← Home
                 </Link>
 
-                <h1
-                    className="text-white/80 text-lg font-medium"
-                    style={{ fontFamily: 'system-ui,sans-serif' }}
+                {/* Info card — mirrors .search-info.card from original */}
+                <div
+                    className="rounded-2xl border border-white/12 px-6 py-5 mb-6 text-center"
+                    style={{
+                        background: 'rgba(255,255,255,0.06)',
+                        backdropFilter: 'blur(8px)',
+                        WebkitBackdropFilter: 'blur(8px)',
+                    }}
                 >
-                    {q ? `Results for "${q}" · ${typeLabel}` : 'Search Results'}
-                </h1>
-
-                {!loading && !error && (
-                    <p className="text-white/35 text-sm mt-1"
-                        style={{ fontFamily: 'system-ui,sans-serif' }}>
-                        {count} result{count !== 1 ? 's' : ''} found
-                    </p>
-                )}
+                    <h2
+                        className="text-white font-bold mb-1"
+                        style={{
+                            fontFamily: UI_FONT,
+                            fontSize: 'clamp(1.1rem, 2.4vw, 1.5rem)',
+                        }}
+                    >
+                        Search Results
+                    </h2>
+                    {q && (
+                        <p className="text-white/60 text-sm" style={{ fontFamily: UI_FONT }}>
+                            {q.length > 0 && (
+                                <span style={{ fontFamily: GURBANI_FONT }}>{q}</span>
+                            )}
+                            {' '}· {typeLabel}
+                            {!loading && total !== null && (
+                                <span className="ml-2 text-white/40">
+                                    ({count.toLocaleString()} result{count !== 1 ? 's' : ''})
+                                </span>
+                            )}
+                        </p>
+                    )}
+                </div>
             </div>
 
             {/* Loading */}
@@ -98,7 +93,7 @@ export default function SearchResults() {
             {/* Error */}
             {!loading && error && (
                 <p className="text-white/45 text-center py-16 text-sm"
-                    style={{ fontFamily: 'system-ui,sans-serif' }}>
+                    style={{ fontFamily: UI_FONT }}>
                     {error}
                 </p>
             )}
@@ -113,71 +108,60 @@ export default function SearchResults() {
                 </p>
             )}
 
-            {/* Results grid */}
+            {/* Results — matches original .result-item.card layout */}
             {!loading && !error && results.length > 0 && (
-                <div
-                    className="grid gap-3"
-                    style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))' }}
-                >
+                <div className="space-y-3">
                     {results.map((v, i) => {
                         const { gurmukhi, ang, lineNo } = parseVerseItem(v);
                         if (!gurmukhi) return null;
+                        const meta = [
+                            ang ? `Ang ${ang}` : null,
+                            lineNo ? `Line ${lineNo}` : null,
+                        ].filter(Boolean).join(' • ');
+
                         return (
-                            <ResultCard
+                            <button
                                 key={i}
-                                gurmukhi={gurmukhi}
-                                ang={ang}
-                                lineNo={lineNo}
+                                type="button"
                                 onClick={() => ang && navigate(`/reader/${ang}`)}
-                            />
+                                className="group w-full text-left
+                           px-5 py-4 rounded-[18px]
+                           border border-white/12 hover:border-white/25
+                           bg-white/[0.06] hover:bg-white/[0.10]
+                           backdrop-blur-md
+                           hover:-translate-y-px
+                           transition-all duration-150 ease-out
+                           focus-visible:outline-2 focus-visible:outline-white/50"
+                                style={{
+                                    backdropFilter: 'blur(8px)',
+                                    WebkitBackdropFilter: 'blur(8px)',
+                                }}
+                            >
+                                {/* Gurmukhi text — large, matches .result-gurmukhi */}
+                                <p
+                                    className="text-white leading-relaxed mb-1.5"
+                                    style={{
+                                        fontFamily: GURBANI_FONT,
+                                        fontSize: 'clamp(1.1rem, 2.4vw, 1.45rem)',
+                                        lineHeight: 1.7,
+                                    }}
+                                >
+                                    {gurmukhi}
+                                </p>
+                                {/* Meta — Ang • Line */}
+                                {meta && (
+                                    <p
+                                        className="text-white/55 text-sm"
+                                        style={{ fontFamily: UI_FONT }}
+                                    >
+                                        {meta}
+                                    </p>
+                                )}
+                            </button>
                         );
                     })}
                 </div>
             )}
         </div>
-    );
-}
-
-// ─── Result card ──────────────────────────────────────────────────────────────
-function ResultCard({ gurmukhi, ang, lineNo, onClick }) {
-    const meta = [
-        ang ? `Ang ${ang}` : null,
-        lineNo ? `Line ${lineNo}` : null,
-    ].filter(Boolean).join(' · ');
-
-    return (
-        <button
-            type="button"
-            onClick={onClick}
-            className="group text-left w-full
-                 px-5 py-4 rounded-[18px]
-                 border border-white/18 hover:border-white/32
-                 bg-white/[0.07] hover:bg-white/[0.12]
-                 backdrop-blur-md
-                 shadow-[0_4px_18px_rgba(0,0,0,0.18)]
-                 hover:shadow-[0_8px_28px_rgba(0,0,0,0.28)]
-                 hover:-translate-y-0.5
-                 transition-all duration-200 ease-out
-                 focus-visible:outline focus-visible:outline-2
-                 focus-visible:outline-white/50"
-        >
-            <p
-                className="text-white leading-relaxed mb-2 group-hover:text-white/95"
-                style={{
-                    fontFamily: GURBANI_FONT,
-                    fontSize: 'clamp(0.95rem, 2vw, 1.05rem)',
-                    lineHeight: 1.7,
-                }}
-            >
-                {gurmukhi}
-            </p>
-
-            {meta && (
-                <p className="text-white/40 text-xs"
-                    style={{ fontFamily: 'system-ui,sans-serif' }}>
-                    {meta}
-                </p>
-            )}
-        </button>
     );
 }

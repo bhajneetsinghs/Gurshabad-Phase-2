@@ -8,10 +8,6 @@ export default function About() {
                 About
             </h1>
 
-            {/* <p>
-Gurshabad.org is a research platform dedicated to meaningful engagement with Gurbani.
-</p> */}
-
             <p>
                 Gurshabad.org is a vibrant, research-driven platform dedicated to meaningful engagement with Gurbani, moving beyond traditional literal translations and outdated commentaries. Our mission is straightforward yet profound: to foster a thoughtful, internalized understanding of Gurbani that transforms daily life here and now, rather than emphasizing ritual or speculation about the afterlife.
                 <p>
