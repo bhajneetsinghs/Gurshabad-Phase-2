@@ -2,7 +2,7 @@ export default function About() {
 
     return (
 
-        <div className="max-w-[900px] mx-auto text-white p-8 bg-white/10 border border-white/20 rounded-xl mt-24">
+        <div className="max-w-[900px] mx-auto text-white p-8 bg-white/10 border border-white/20 rounded-xl mt-16">
 
             <h1 className="text-3xl mb-4">
                 About
