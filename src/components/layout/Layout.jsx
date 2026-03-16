@@ -8,7 +8,7 @@ export default function Layout({ children }) {
     <>
       <Navbar />
 
-      <main className="pt-16 min-h-screen">
+      <main className="pt-8 min-h-screen">
 
         {children}
 
