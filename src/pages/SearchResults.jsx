@@ -35,7 +35,7 @@ export default function SearchResults() {
     const count = total ?? results.length;
 
     return (
-        <div className="max-w-[min(980px,92vw)] mx-auto px-4 pb-16 pt-6">
+        <div className="max-w-[min(980px,92vw)] mx-auto px-4 pb-16 pt-16">
 
             {/* Back + heading */}
             <div className="mb-8">

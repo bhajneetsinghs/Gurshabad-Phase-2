@@ -108,9 +108,8 @@ export default function Reader() {
 
             {/* ── Sticky toolbar ── */}
             <div className="sticky top-16 z-40 border-b border-white/10 bg-black/60 backdrop-blur-xl">
-                <div className="max-w-[min(900px,92vw)] mx-auto px-4 py-2.5
-                        flex items-center gap-3 flex-wrap">
-
+                <div className="max-w-[min(900px,92vw)] mx-auto px-4 py-8
+        flex items-center gap-3 flex-wrap">
                     <ToolbarBtn disabled={atStart} onClick={() => goToAng(angNum - 1)}>
                         ← Previous
                     </ToolbarBtn>
