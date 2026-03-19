@@ -519,17 +519,17 @@ const PER_PAGE = 12;
 // ═══════════════════════════════════════════════════════════════════
 const TOPIC_ICON = (name = "") => {
   const n = name.toLowerCase();
-  if (n.includes("article")) return "📜";
-  if (n.includes("history")) return "🏛️";
-  if (n.includes("jup") || n.includes("bannee") || n.includes("bani")) return "🕉️";
-  if (n.includes("sidh")) return "📿";
-  if (n.includes("vichar") || n.includes("shabad") || n.includes("shabd")) return "✍️";
-  if (n.includes("diwan")) return "🎙️";
-  if (n.includes("video")) return "🎥";
-  if (n.includes("bulletin") || n.includes("media") || n.includes("international")) return "📰";
-  if (n.includes("bachitr") || n.includes("dsm") || n.includes("granth")) return "📚";
-  if (n.includes("faq")) return "❓";
-  return "📖";
+  if (n.includes("article")) return "";
+  if (n.includes("history")) return "";
+  if (n.includes("jup") || n.includes("bannee") || n.includes("bani")) return "";
+  if (n.includes("sidh")) return "";
+  if (n.includes("vichar") || n.includes("shabad") || n.includes("shabd")) return "";
+  if (n.includes("diwan")) return "";
+  if (n.includes("video")) return "";
+  if (n.includes("bulletin") || n.includes("media") || n.includes("international")) return "";
+  if (n.includes("bachitr") || n.includes("dsm") || n.includes("granth")) return "";
+  if (n.includes("faq")) return "";
+  return "";
 };
 
 // ═══════════════════════════════════════════════════════════════════
@@ -680,7 +680,7 @@ function Spinner({ label = "Loading…" }) {
 function ErrorBox({ msg, onRetry }) {
   return (
     <div className="text-center py-16">
-      <p className="text-red-400/70 mb-1">⚠️ Could not load articles</p>
+      <p className="text-red-400/70 mb-1"> Could not load articles</p>
       <p className="text-white/25 text-sm mb-4 max-w-xs mx-auto">{msg}</p>
       {onRetry && <button onClick={onRetry} className="px-4 py-1.5 rounded-lg bg-white/5 border border-white/10 text-white/50 hover:text-white text-xs transition-all">Retry</button>}
     </div>
@@ -690,7 +690,7 @@ function ErrorBox({ msg, onRetry }) {
 function Empty() {
   return (
     <div className="text-center py-20 space-y-2">
-      <p className="text-4xl">📭</p>
+      <p className="text-4xl"></p>
       <p className="text-white/40">No articles found</p>
       <p className="text-white/20 text-sm">Try a different search or topic.</p>
     </div>
@@ -856,7 +856,7 @@ function SvfView({ search }) {
               className="group flex items-center gap-3 w-full p-4 rounded-2xl mb-3
                          bg-amber-400/10 border border-amber-400/25
                          hover:bg-amber-400/15 hover:border-amber-400/50 transition-all">
-              <span className="text-2xl">📚</span>
+              <span className="text-2xl"></span>
               <div className="text-left">
                 <p className="text-amber-300 font-bold text-sm">All Articles</p>
                 <p className="text-amber-300/40 text-xs">{cats.reduce((s, c) => s + c.count, 0)} total</p>
