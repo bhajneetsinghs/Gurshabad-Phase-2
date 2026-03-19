@@ -934,7 +934,7 @@ function GurbaniView({ search }) {
               ${!activeCat
                 ? "bg-emerald-400 text-gray-900 shadow-lg shadow-emerald-400/20"
                 : "bg-white/5 text-white/40 border border-white/10 hover:bg-white/10 hover:text-white"}`}>
-            📚 All
+            All
             {total > 0 && !activeCat && <span className="opacity-60 text-[10px]">({total})</span>}
           </button>
 
