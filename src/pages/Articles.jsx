@@ -1177,7 +1177,7 @@ export default function Articles() {
 
         {/* ══ Search ════════════════════════════════════════════════ */}
         <div className="relative mb-8">
-          <span className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20 pointer-events-none">🔍</span>
+          <span className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20 pointer-events-none"></span>
           <input
             type="text"
             value={search}
