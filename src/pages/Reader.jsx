@@ -2,7 +2,8 @@ import { useEffect, useState, useRef, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getAng, parseAngData } from '../services/gurbaniApi';
 import MeaningBox from '../components/reader/MeaningBox';
-
+import { Link } from 'react-router-dom';
+import SearchBar from '../components/search/SearchBar';
 
 const MIN_ANG = 1;
 const MAX_ANG = 1430;
@@ -19,10 +20,8 @@ export default function Reader() {
     const [error, setError] = useState(null);
     const [inputVal, setInputVal] = useState(String(angNum));
     const [showTrans, setShowTrans] = useState(false);
-    const [showMeaning, setShowMeaning] = useState(false);
-    // MeaningBox state — null = closed, object = data to show
+    // const [showMeaning, setShowMeaning] = useState(false);  // ← translation toggle removed
     const [meaningData, setMeaningData] = useState(null);
-    // Raw page items (needed for per-line etymology)
     const [rawPage, setRawPage] = useState([]);
     const abortRef = useRef(null);
 
@@ -41,7 +40,6 @@ export default function Reader() {
         getAng(angNum)
             .then((raw) => {
                 if (ctrl.signal.aborted) return;
-                // Store raw page for etymology lookup
                 if (Array.isArray(raw?.page)) setRawPage(raw.page);
                 const parsed = parseAngData(raw);
                 if (!parsed.length) setError(`No content found for Ang ${angNum}.`);
@@ -68,7 +66,7 @@ export default function Reader() {
     useEffect(() => {
         const h = (e) => {
             if (e.target.tagName === 'INPUT') return;
-            if (meaningData) return; // don't navigate when popup is open
+            if (meaningData) return;
             if (e.key === 'ArrowLeft') { e.preventDefault(); goToAng(angNum - 1); }
             if (e.key === 'ArrowRight') { e.preventDefault(); goToAng(angNum + 1); }
         };
@@ -77,26 +75,23 @@ export default function Reader() {
     }, [angNum, goToAng, meaningData]);
 
     // ── Word click → MeaningBox ───────────────────────────────────────────────
-    // Look up the matching raw page item to get etymology (translation.pu.pss)
     function handleWordClick(line, clickedWord) {
-        // Find matching raw item by verseId or gurmukhi text
         const rawItem = rawPage.find(
             (item) => item.verseId === line.id ||
                 item.verse?.unicode === line.gurmukhi
         );
 
-        // Build popup data
-        const etymology =
-            rawItem?.translation?.pu?.pss?.unicode ||
-            rawItem?.translation?.pu?.pss?.gurmukhi ||
-            rawItem?.translation?.pu?.ft?.unicode ||
-            '';
+        // const etymology =                              // ← word meanings removed
+        //     rawItem?.translation?.pu?.pss?.unicode ||
+        //     rawItem?.translation?.pu?.pss?.gurmukhi ||
+        //     rawItem?.translation?.pu?.ft?.unicode ||
+        //     '';
 
         setMeaningData({
-            gurmukhiText: line.gurmukhi,          // full line (like original)
-            translation: line.translation || '',
+            gurmukhiText: line.gurmukhi,
+            // translation: line.translation || '',       // ← translation removed
             transliteration: line.translit || '',
-            etymology: etymology,
+            // etymology: etymology,                       // ← word meanings removed
         });
     }
 
@@ -108,8 +103,19 @@ export default function Reader() {
 
             {/* ── Sticky toolbar ── */}
             <div className="sticky top-16 z-40 border-b border-white/10 bg-black/60 backdrop-blur-xl">
+                <div className="max-w-[min(900px,92vw)] mx-auto px-4 pt-4 pb-2 flex flex-col gap-3">
+                    <Link
+                        to="/"
+                        className="inline-flex items-center gap-1.5 text-white/40
+                                   hover:text-white/70 text-sm transition-colors"
+                        style={{ fontFamily: 'system-ui,-apple-system,sans-serif' }}
+                    >
+                        ← Home
+                    </Link>
+                    <SearchBar hideDropdown />
+                </div>
                 <div className="max-w-[min(900px,92vw)] mx-auto px-4 py-8
-        flex items-center gap-3 flex-wrap">
+                                flex items-center gap-3 flex-wrap">
                     <ToolbarBtn disabled={atStart} onClick={() => goToAng(angNum - 1)}>
                         ← Previous
                     </ToolbarBtn>
@@ -120,7 +126,7 @@ export default function Reader() {
                             className="text-white/45 text-sm select-none"
                             style={{ fontFamily: 'system-ui,sans-serif' }}
                         >
-                            Ang
+                            Page
                         </label>
                         <input
                             id="ang-input"
@@ -130,11 +136,11 @@ export default function Reader() {
                             value={inputVal}
                             onChange={(e) => setInputVal(e.target.value)}
                             className="w-20 text-center text-white text-sm
-                         bg-white/10 border border-white/25 rounded-xl px-2 py-1.5
-                         focus:outline-none focus:border-white/50 focus:bg-white/15
-                         transition-colors [appearance:textfield]
-                         [&::-webkit-inner-spin-button]:appearance-none
-                         [&::-webkit-outer-spin-button]:appearance-none"
+                                       bg-white/10 border border-white/25 rounded-xl px-2 py-1.5
+                                       focus:outline-none focus:border-white/50 focus:bg-white/15
+                                       transition-colors [appearance:textfield]
+                                       [&::-webkit-inner-spin-button]:appearance-none
+                                       [&::-webkit-outer-spin-button]:appearance-none"
                             style={{ fontFamily: 'system-ui,sans-serif' }}
                         />
                         <ToolbarBtn type="submit">Go</ToolbarBtn>
@@ -149,9 +155,10 @@ export default function Reader() {
                     <ToggleBtn active={showTrans} onClick={() => setShowTrans(v => !v)}>
                         Translit
                     </ToggleBtn>
+                    {/* Translation toggle removed — disabled site-wide
                     <ToggleBtn active={showMeaning} onClick={() => setShowMeaning(v => !v)}>
                         English
-                    </ToggleBtn>
+                    </ToggleBtn> */}
                 </div>
             </div>
 
@@ -175,7 +182,7 @@ export default function Reader() {
                             className="text-white font-semibold text-base"
                             style={{ fontFamily: 'system-ui,sans-serif' }}
                         >
-                            Ang {angNum}
+                            Page {angNum}
                         </span>
                         <span
                             className="text-white/25 text-xs"
@@ -191,7 +198,7 @@ export default function Reader() {
                         {loading && (
                             <div className="flex justify-center py-16">
                                 <div className="w-8 h-8 rounded-full border-2 border-white/15
-                                border-t-white/70 animate-spin" />
+                                                border-t-white/70 animate-spin" />
                             </div>
                         )}
 
@@ -204,7 +211,7 @@ export default function Reader() {
                                 <button
                                     onClick={() => goToAng(angNum)}
                                     className="px-4 py-2 rounded-xl text-sm text-white/60
-                             border border-white/20 hover:bg-white/10 transition-colors"
+                                               border border-white/20 hover:bg-white/10 transition-colors"
                                     style={{ fontFamily: 'system-ui,sans-serif' }}
                                 >
                                     Retry
@@ -212,13 +219,13 @@ export default function Reader() {
                             </div>
                         )}
 
-                        {/* Click-hint */}
+                        {/* Click hint — updated to say transliteration not translation */}
                         {!loading && !error && lines.length > 0 && (
                             <p
                                 className="text-white/25 text-xs mb-5 text-right"
                                 style={{ fontFamily: 'system-ui,sans-serif' }}
                             >
-                                Tap any line for translation
+                                Tap any line for transliteration
                             </p>
                         )}
 
@@ -230,7 +237,7 @@ export default function Reader() {
                                         key={line.id ?? i}
                                         line={line}
                                         showTrans={showTrans}
-                                        showMeaning={showMeaning}
+                                        // showMeaning={showMeaning}   // ← removed
                                         onWordClick={(word) => handleWordClick(line, word)}
                                     />
                                 ))}
@@ -245,10 +252,10 @@ export default function Reader() {
                             style={{ background: 'rgba(255,255,255,0.03)' }}
                         >
                             <ToolbarBtn disabled={atStart} onClick={() => goToAng(angNum - 1)}>
-                                ← Previous Ang
+                                ← Previous Page
                             </ToolbarBtn>
                             <ToolbarBtn disabled={atEnd} onClick={() => goToAng(angNum + 1)}>
-                                Next Ang →
+                                Next Page →
                             </ToolbarBtn>
                         </div>
                     )}
@@ -267,16 +274,14 @@ export default function Reader() {
 }
 
 // ─── Verse block ──────────────────────────────────────────────────────────────
-// Each Gurmukhi line is split into words — each word is clickable.
-// Clicking any word in a line triggers the MeaningBox for that whole line.
-function VerseBlock({ line, showTrans, showMeaning, onWordClick }) {
+function VerseBlock({ line, showTrans, /* showMeaning, */ onWordClick }) {
     if (!line.gurmukhi) return null;
 
     const words = line.gurmukhi.split(' ').filter(Boolean);
 
     return (
         <div className="py-5 first:pt-0 last:pb-0">
-            {/* Gurmukhi — words as clickable spans */}
+            {/* Gurmukhi words */}
             <p
                 className="leading-loose mb-1"
                 style={{
@@ -291,10 +296,10 @@ function VerseBlock({ line, showTrans, showMeaning, onWordClick }) {
                         <span
                             onClick={() => onWordClick(word)}
                             className="text-white font-bold cursor-pointer
-                         hover:text-amber-200 hover:underline
-                         underline-offset-4 decoration-dotted
-                         transition-colors duration-100"
-                            title="Click for meaning"
+                                       hover:text-amber-200 hover:underline
+                                       underline-offset-4 decoration-dotted
+                                       transition-colors duration-100"
+                            title="Click for transliteration"
                         >
                             {word}
                         </span>
@@ -303,7 +308,7 @@ function VerseBlock({ line, showTrans, showMeaning, onWordClick }) {
                 ))}
             </p>
 
-            {/* Transliteration */}
+            {/* Transliteration toggle */}
             {showTrans && line.translit && (
                 <p
                     className="text-white/50 text-sm italic mt-1.5 leading-relaxed"
@@ -313,16 +318,16 @@ function VerseBlock({ line, showTrans, showMeaning, onWordClick }) {
                 </p>
             )}
 
-            {/* English */}
+            {/* English translation — removed site-wide
             {showMeaning && line.translation && (
                 <p
                     className="text-white/38 text-sm mt-1.5 leading-relaxed
-                     pl-3 border-l-2 border-white/15"
+                               pl-3 border-l-2 border-white/15"
                     style={{ fontFamily: 'system-ui,-apple-system,sans-serif' }}
                 >
                     {line.translation}
                 </p>
-            )}
+            )} */}
         </div>
     );
 }

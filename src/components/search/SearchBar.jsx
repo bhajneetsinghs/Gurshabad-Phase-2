@@ -5,32 +5,54 @@ import { parseVerseItem, searchRaw } from '../../services/gurbaniApi';
 const GURBANI_FONT = "'Noto Sans Gurmukhi','Gurmukhi MN','Kohinoor Gurmukhi',sans-serif";
 const UI_FONT = 'system-ui,-apple-system,sans-serif';
 
-// Detect if string contains Gurmukhi Unicode characters
-const isGurmukhi = (s) => /[\u0A00-\u0A7F]/.test(s);
+const isGurmukhiType = (t) => t === '1' || t === '2';
 
-export default function SearchBar() {
+const DIG = ['੦','੧','੨','੩','੪','੫','੬','੭','੮','੯'];
+const MAP = {
+  a:'ਅ',b:'ਬ',c:'ਚ',d:'ਦ',e:'ਇ',f:'ਫ',g:'ਗ',h:'ਹ',i:'ਇ',j:'ਜ',
+  k:'ਕ',l:'ਲ',m:'ਮ',n:'ਨ',o:'ਉ',p:'ਪ',q:'ਕ',r:'ਰ',s:'ਸ',t:'ਤ',
+  u:'ਉ',v:'ਵ',w:'ਵ',x:'ਕਸ',y:'ਯ',z:'ਜ਼',
+  A:'ਆ',B:'ਭ',C:'ਛ',D:'ਡ',E:'ਏ',F:'ਫ਼',G:'ਘ',H:'ਃ',I:'ਈ',J:'ਝ',
+  K:'ਖ',L:'ਲ਼',M:'ੰ',N:'ਣ',O:'ਓ',P:'ਫ਼',Q:'ਕ਼',R:'ੜ',S:'ਸ਼',T:'ਟ',
+  U:'ਊ',V:'ਵ',W:'ਵ',X:'ਖ਼',Y:'ਯ',Z:'ਗ਼',
+};
+function romanToGurmukhi(s) {
+  return s.replace(/[0-9A-Za-z]/g, ch =>
+    /[0-9]/.test(ch) ? DIG[+ch] : (MAP[ch] || ch)
+  );
+}
+
+export default function SearchBar({
+    initialQuery = '',
+    initialType  = '2',
+    hideDropdown = false,
+}) {
     const navigate = useNavigate();
 
-    const [query, setQuery] = useState('');
-    const [searchType, setSearchType] = useState('4'); // default: Romanized (type 4)
-    const [liveResults, setLiveResults] = useState([]);
-    const [liveLoading, setLiveLoading] = useState(false);
+    const [query,        setQuery]        = useState(initialQuery);
+    const [searchType,   setSearchType]   = useState(initialType);
+    const [liveResults,  setLiveResults]  = useState([]);
+    const [liveLoading,  setLiveLoading]  = useState(false);
     const [showDropdown, setShowDropdown] = useState(false);
 
-    const wrapRef = useRef(null);
+    const wrapRef  = useRef(null);
     const inputRef = useRef(null);
     const abortRef = useRef(null);
     const timerRef = useRef(null);
     const tokenRef = useRef(0);
 
-    // ── Submit ─────────────────────────────────────────────────────────────────
+    // Sync when URL params change
+    useEffect(() => {
+        setQuery(initialQuery);
+        setSearchType(initialType);
+    }, [initialQuery, initialType]);
+
     function handleSubmit(e) {
         e.preventDefault();
         const q = query.trim();
         if (!q) return;
         setShowDropdown(false);
 
-        // Ang search — navigate directly
         if (searchType === '5') {
             let ang = parseInt(q, 10);
             if (!Number.isFinite(ang)) { inputRef.current?.focus(); return; }
@@ -42,9 +64,25 @@ export default function SearchBar() {
         navigate(`/search?q=${encodeURIComponent(q)}&type=${searchType}`);
     }
 
-    // ── Live search ────────────────────────────────────────────────────────────
+    function handleInputChange(e) {
+        const val = e.target.value;
+        if (isGurmukhiType(searchType)) {
+            setQuery(romanToGurmukhi(val));
+        } else {
+            setQuery(val);
+        }
+    }
+
+    function handleTypeChange(e) {
+        setSearchType(e.target.value);
+        setQuery('');
+        setLiveResults([]);
+        setShowDropdown(false);
+        inputRef.current?.focus();
+    }
+
     const runLive = useCallback(async (q, type) => {
-        if (!q || q.length < 1 || type === '5') {
+        if (!q || q.length < 1 || type === '5' || hideDropdown) {
             setLiveResults([]);
             setShowDropdown(false);
             return;
@@ -67,16 +105,14 @@ export default function SearchBar() {
         } finally {
             if (myToken === tokenRef.current) setLiveLoading(false);
         }
-    }, []);
+    }, [hideDropdown]);
 
-    // Debounce 180ms
     useEffect(() => {
         clearTimeout(timerRef.current);
         timerRef.current = setTimeout(() => runLive(query.trim(), searchType), 180);
         return () => clearTimeout(timerRef.current);
     }, [query, searchType, runLive]);
 
-    // Close on outside click
     useEffect(() => {
         const h = (e) => {
             if (wrapRef.current && !wrapRef.current.contains(e.target))
@@ -86,15 +122,14 @@ export default function SearchBar() {
         return () => document.removeEventListener('mousedown', h);
     }, []);
 
-    // ── Placeholder text per search type ──────────────────────────────────────
     const placeholder = {
-        '1': 'First letters e.g. ਸ ਨ ਕ ਪ',
-        '2': 'ਗੁਰਬਾਣੀ ਖੋਜ (Gurmukhi)',
-        '4': 'Type in Roman e.g. sat naam...',
-        '5': 'Enter Ang number…',
+        '1': 'ਪਹਿਲੇ ਅੱਖਰ ਟਾਈਪ ਕਰੋ…',
+        '2': 'ਗੁਰਬਾਣੀ ਖੋਜ ਕਰੋ…',
+        '5': 'ਅੰਗ ਨੰਬਰ ਦਰਜ ਕਰੋ…',
     }[searchType] ?? 'Search…';
 
-    // ── Render ─────────────────────────────────────────────────────────────────
+    const useGurmukhiInput = isGurmukhiType(searchType);
+
     return (
         <div ref={wrapRef} className="relative w-full">
             <form
@@ -104,16 +139,9 @@ export default function SearchBar() {
                    border border-white/18 bg-white/[0.06]
                    backdrop-blur-lg"
             >
-                {/* Search type */}
                 <select
                     value={searchType}
-                    onChange={(e) => {
-                        setSearchType(e.target.value);
-                        setQuery('');
-                        setLiveResults([]);
-                        setShowDropdown(false);
-                        inputRef.current?.focus();
-                    }}
+                    onChange={handleTypeChange}
                     aria-label="Search type"
                     className="flex-none appearance-none
                      border border-white/25 rounded-xl
@@ -128,25 +156,23 @@ export default function SearchBar() {
                         backgroundPosition: 'right 10px center',
                     }}
                 >
-                    <option value="4">Roman (sat naam…)</option>
-                    <option value="1">First Letter (Gurmukhi)</option>
+                    <option value="1">First Letter (Anywhere)</option>
                     <option value="2">Full Word (Gurmukhi)</option>
-                    <option value="5">Ang Number</option>
+                    <option value="5">Page Number</option>
                 </select>
 
-                {/* Input */}
                 <input
                     ref={inputRef}
                     type="search"
                     value={query}
-                    onChange={(e) => setQuery(e.target.value)}
-                    onFocus={() => liveResults.length > 0 && setShowDropdown(true)}
-                    inputMode="text"
+                    onChange={handleInputChange}
+                    onFocus={() => !hideDropdown && liveResults.length > 0 && setShowDropdown(true)}
+                    inputMode={searchType === '5' ? 'numeric' : 'text'}
                     autoComplete="off"
                     autoCapitalize="off"
                     spellCheck={false}
                     dir="ltr"
-                    lang={isGurmukhi(query) ? 'pa' : 'en'}
+                    lang={useGurmukhiInput ? 'pa' : 'en'}
                     placeholder={placeholder}
                     className="flex-1 min-w-0
                      border border-white/25 rounded-xl
@@ -158,12 +184,12 @@ export default function SearchBar() {
                      [&::-webkit-search-cancel-button]:appearance-none
                      [&::-webkit-search-decoration]:hidden"
                     style={{
-                        fontFamily: isGurmukhi(query) ? GURBANI_FONT : UI_FONT,
-                        letterSpacing: isGurmukhi(query) ? '0.15px' : 'normal',
+                        fontFamily: useGurmukhiInput ? GURBANI_FONT : UI_FONT,
+                        letterSpacing: useGurmukhiInput ? '0.15px' : 'normal',
+                        fontSize: useGurmukhiInput ? '1.05rem' : '1rem',
                     }}
                 />
 
-                {/* Submit */}
                 <button
                     type="submit"
                     className="flex-none px-5 py-2 rounded-xl text-sm font-medium
@@ -176,22 +202,21 @@ export default function SearchBar() {
                 </button>
             </form>
 
-            {/* Search type hint */}
-            {searchType === '4' && (
+            {searchType === '1' && (
                 <p className="mt-1.5 text-white/25 text-xs text-center"
-                    style={{ fontFamily: UI_FONT }}>
-                    Type Roman phonetics — BaniDB converts automatically
+                    style={{ fontFamily: GURBANI_FONT }}>
+                    ਹਰ ਸ਼ਬਦ ਦਾ ਪਹਿਲਾ ਅੱਖਰ ਟਾਈਪ ਕਰੋ — ਅੰਗਰੇਜ਼ੀ ਵਿੱਚ ਟਾਈਪ ਕਰੋ, ਗੁਰਮੁਖੀ ਵਿੱਚ ਬਦਲੇਗਾ
                 </p>
             )}
             {searchType === '2' && (
                 <p className="mt-1.5 text-white/25 text-xs text-center"
-                    style={{ fontFamily: UI_FONT }}>
-                    Use your Gurmukhi keyboard to type
+                    style={{ fontFamily: GURBANI_FONT }}>
+                    ਅੰਗਰੇਜ਼ੀ ਵਿੱਚ ਟਾਈਪ ਕਰੋ — ਗੁਰਮੁਖੀ ਵਿੱਚ ਬਦਲੇਗਾ
                 </p>
             )}
 
-            {/* Live dropdown */}
-            {showDropdown && query.trim().length > 0 && searchType !== '5' && (
+            {/* Dropdown — hidden on SearchResults page */}
+            {!hideDropdown && showDropdown && query.trim().length > 0 && searchType !== '5' && (
                 <div
                     className="absolute left-0 right-0 top-full mt-2 z-50
                      rounded-2xl border border-white/15 overflow-hidden
@@ -211,14 +236,12 @@ export default function SearchBar() {
                             </span>
                         </div>
                     )}
-
                     {!liveLoading && liveResults.length === 0 && (
                         <p className="px-5 py-5 text-white/35 text-sm text-center"
-                            style={{ fontFamily: UI_FONT }}>
-                            No results found
+                            style={{ fontFamily: GURBANI_FONT }}>
+                            ਕੋਈ ਨਤੀਜਾ ਨਹੀਂ ਮਿਲਿਆ
                         </p>
                     )}
-
                     {!liveLoading && liveResults.map((v, i) => {
                         const { gurmukhi, ang, translit } = parseVerseItem(v);
                         if (!gurmukhi) return null;
@@ -247,8 +270,8 @@ export default function SearchBar() {
                                     )}
                                     {ang && (
                                         <span className="flex-none text-white/30 text-xs"
-                                            style={{ fontFamily: UI_FONT }}>
-                                            Ang {ang}
+                                            style={{ fontFamily: GURBANI_FONT }}>
+                                            ਅੰਗ {ang}
                                         </span>
                                     )}
                                 </div>

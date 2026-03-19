@@ -28,6 +28,7 @@ html,
 body {
   @apply bg-cover bg-top bg-fixed min-h-screen font-sans;
   background-image: url('assets/images/bg.png');
+  /* background-color: black; */
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
