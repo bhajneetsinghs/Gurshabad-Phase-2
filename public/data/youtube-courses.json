@@ -1,0 +1,23 @@
+[
+    {
+        "id": "sikhi-vichar",
+        "title": "Sikhi Vichar Forum",
+        "playlists": [
+            {
+                "id": "hijacking-of-sikhi",
+                "title": "Hijacking of Sikhi",
+                "guided": true,
+                "videos": [
+                    {
+                        "title": "Hijacking of Sikhi - Part 1",
+                        "youtube": "https://www.youtube.com/watch?v=k1gBXr7uSsY"
+                    },
+                    {
+                        "title": "Hijacking of Sikhi - Part 2",
+                        "youtube": "https://www.youtube.com/watch?v=VIDEO_ID_2"
+                    }
+                ]
+            }
+        ]
+    }
+]
