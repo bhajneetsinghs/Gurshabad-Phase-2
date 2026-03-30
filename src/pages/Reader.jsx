@@ -20,12 +20,10 @@ export default function Reader() {
     const [error, setError] = useState(null);
     const [inputVal, setInputVal] = useState(String(angNum));
     const [showTrans, setShowTrans] = useState(false);
-    // const [showMeaning, setShowMeaning] = useState(false);  // ← translation toggle removed
     const [meaningData, setMeaningData] = useState(null);
     const [rawPage, setRawPage] = useState([]);
     const abortRef = useRef(null);
 
-    // ── Fetch ─────────────────────────────────────────────────────────────────
     useEffect(() => {
         if (abortRef.current) abortRef.current.abort();
         const ctrl = new AbortController();
@@ -51,7 +49,6 @@ export default function Reader() {
         return () => ctrl.abort();
     }, [angNum]);
 
-    // ── Navigation ────────────────────────────────────────────────────────────
     const goToAng = useCallback(
         (n) => navigate(`/reader/${clamp(n, MIN_ANG, MAX_ANG)}`),
         [navigate]
@@ -74,24 +71,14 @@ export default function Reader() {
         return () => window.removeEventListener('keydown', h);
     }, [angNum, goToAng, meaningData]);
 
-    // ── Word click → MeaningBox ───────────────────────────────────────────────
     function handleWordClick(line, clickedWord) {
         const rawItem = rawPage.find(
             (item) => item.verseId === line.id ||
                 item.verse?.unicode === line.gurmukhi
         );
-
-        // const etymology =                              // ← word meanings removed
-        //     rawItem?.translation?.pu?.pss?.unicode ||
-        //     rawItem?.translation?.pu?.pss?.gurmukhi ||
-        //     rawItem?.translation?.pu?.ft?.unicode ||
-        //     '';
-
         setMeaningData({
             gurmukhiText: line.gurmukhi,
-            // translation: line.translation || '',       // ← translation removed
             transliteration: line.translit || '',
-            // etymology: etymology,                       // ← word meanings removed
         });
     }
 
@@ -103,163 +90,231 @@ export default function Reader() {
 
             {/* ── Sticky toolbar ── */}
             <div className="sticky top-16 z-40 border-b border-white/10 bg-black/60 backdrop-blur-xl">
-                <div className="max-w-[min(900px,92vw)] mx-auto px-4 pt-4 pb-2 flex flex-col gap-3">
-                    <Link
-                        to="/"
-                        className="inline-flex items-center gap-1.5 text-white/40
-                                   hover:text-white/70 text-sm transition-colors"
-                        style={{ fontFamily: 'system-ui,-apple-system,sans-serif' }}
-                    >
-                        ← Home
-                    </Link>
-                    <SearchBar hideDropdown />
-                </div>
-                <div className="max-w-[min(900px,92vw)] mx-auto px-4 py-8
-                                flex items-center gap-3 flex-wrap">
-                    <ToolbarBtn disabled={atStart} onClick={() => goToAng(angNum - 1)}>
-                        ← Previous
-                    </ToolbarBtn>
-
-                    <form onSubmit={handleSubmit} className="flex items-center gap-2">
-                        <label
-                            htmlFor="ang-input"
-                            className="text-white/45 text-sm select-none"
-                            style={{ fontFamily: 'system-ui,sans-serif' }}
-                        >
-                            Page
-                        </label>
-                        <input
-                            id="ang-input"
-                            type="number"
-                            min={MIN_ANG}
-                            max={MAX_ANG}
-                            value={inputVal}
-                            onChange={(e) => setInputVal(e.target.value)}
-                            className="w-20 text-center text-white text-sm
-                                       bg-white/10 border border-white/25 rounded-xl px-2 py-1.5
-                                       focus:outline-none focus:border-white/50 focus:bg-white/15
-                                       transition-colors [appearance:textfield]
-                                       [&::-webkit-inner-spin-button]:appearance-none
-                                       [&::-webkit-outer-spin-button]:appearance-none"
-                            style={{ fontFamily: 'system-ui,sans-serif' }}
-                        />
-                        <ToolbarBtn type="submit">Go</ToolbarBtn>
-                    </form>
-
-                    <ToolbarBtn disabled={atEnd} onClick={() => goToAng(angNum + 1)}>
-                        Next →
-                    </ToolbarBtn>
-
-                    <div className="flex-1" />
-
-                    <ToggleBtn active={showTrans} onClick={() => setShowTrans(v => !v)}>
-                        Translit
-                    </ToggleBtn>
-                    {/* Translation toggle removed — disabled site-wide
-                    <ToggleBtn active={showMeaning} onClick={() => setShowMeaning(v => !v)}>
-                        English
-                    </ToggleBtn> */}
+                <div className="max-w-[min(1200px,95vw)] mx-auto px-4 py-2 flex items-center">
+                    <span className="text-white/30 text-xs"
+                        style={{ fontFamily: 'system-ui,sans-serif' }}>
+                        Ang {angNum} / {MAX_ANG}
+                    </span>
                 </div>
             </div>
 
-            {/* ── Centred glass card ── */}
-            <div className="flex justify-center px-4 py-8">
-                <div
-                    className="w-full max-w-[860px] rounded-3xl border border-white/15 overflow-hidden"
-                    style={{
-                        background: 'rgba(255,255,255,0.06)',
-                        backdropFilter: 'blur(24px) saturate(160%)',
-                        WebkitBackdropFilter: 'blur(24px) saturate(160%)',
-                        boxShadow: '0 32px 80px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.12)',
-                    }}
-                >
-                    {/* Card header */}
+            {/* ── TWO COLUMN LAYOUT ── */}
+            <div className="max-w-[min(1200px,95vw)] mx-auto px-4 py-8
+                            grid grid-cols-3 gap-6 items-start">
+
+                {/* ── LEFT COLUMN 1/3 — Search + Nav ── */}
+                <div className="col-span-1 sticky top-32 flex flex-col gap-4">
+
+                    {/* Search box */}
                     <div
-                        className="px-8 py-4 border-b border-white/10 flex items-center justify-between"
-                        style={{ background: 'rgba(255,255,255,0.04)' }}
+                        className="rounded-2xl border border-white/15 overflow-hidden"
+                        style={{
+                            background: 'rgba(255,255,255,0.04)',
+                            backdropFilter: 'blur(24px)',
+                            WebkitBackdropFilter: 'blur(24px)',
+                        }}
                     >
-                        <span
-                            className="text-white font-semibold text-base"
-                            style={{ fontFamily: 'system-ui,sans-serif' }}
-                        >
-                            Page {angNum}
-                        </span>
-                        <span
-                            className="text-white/25 text-xs"
-                            style={{ fontFamily: 'system-ui,sans-serif' }}
-                        >
-                            {angNum} / {MAX_ANG}
-                        </span>
+                        <div className="px-4 py-2.5 border-b border-white/10">
+                            <p className="text-white/50 text-xs uppercase tracking-widest"
+                                style={{ fontFamily: 'system-ui,sans-serif' }}>
+                                Search Gurbani
+                            </p>
+                        </div>
+                        <div className="p-3">
+                            <SearchBar hideDropdown hideHint />
+                        </div>
                     </div>
 
-                    {/* Card body */}
-                    <div className="px-8 py-7">
+                    {/* Nav controls */}
+                    <div
+                        className="rounded-2xl border border-white/15 overflow-hidden"
+                        style={{
+                            background: 'rgba(255,255,255,0.04)',
+                            backdropFilter: 'blur(24px)',
+                            WebkitBackdropFilter: 'blur(24px)',
+                        }}
+                    >
+                        <div className="px-4 py-2.5 border-b border-white/10">
+                            <p className="text-white/50 text-xs uppercase tracking-widest"
+                                style={{ fontFamily: 'system-ui,sans-serif' }}>
+                                Navigation
+                            </p>
+                        </div>
+                        <div className="p-4 flex flex-col gap-4">
 
-                        {loading && (
-                            <div className="flex justify-center py-16">
-                                <div className="w-8 h-8 rounded-full border-2 border-white/15
-                                                border-t-white/70 animate-spin" />
-                            </div>
-                        )}
-
-                        {!loading && error && (
-                            <div className="text-center py-12 space-y-3">
-                                <p className="text-white/45 text-sm"
-                                    style={{ fontFamily: 'system-ui,sans-serif' }}>
-                                    {error}
-                                </p>
+                            {/* Previous / Next — full width */}
+                            <div className="grid grid-cols-2 gap-2">
                                 <button
-                                    onClick={() => goToAng(angNum)}
-                                    className="px-4 py-2 rounded-xl text-sm text-white/60
-                                               border border-white/20 hover:bg-white/10 transition-colors"
+                                    disabled={atStart}
+                                    onClick={() => goToAng(angNum - 1)}
+                                    className={[
+                                        'py-2 rounded-xl text-sm text-center',
+                                        'border border-white/18 bg-white/[0.07] text-white/70',
+                                        'hover:bg-white/14 hover:text-white hover:border-white/30',
+                                        'active:scale-95 transition-all duration-150',
+                                        atStart ? 'opacity-20 pointer-events-none' : 'cursor-pointer',
+                                    ].join(' ')}
                                     style={{ fontFamily: 'system-ui,sans-serif' }}
                                 >
-                                    Retry
+                                    ← Previous
+                                </button>
+                                <button
+                                    disabled={atEnd}
+                                    onClick={() => goToAng(angNum + 1)}
+                                    className={[
+                                        'py-2 rounded-xl text-sm text-center',
+                                        'border border-white/18 bg-white/[0.07] text-white/70',
+                                        'hover:bg-white/14 hover:text-white hover:border-white/30',
+                                        'active:scale-95 transition-all duration-150',
+                                        atEnd ? 'opacity-20 pointer-events-none' : 'cursor-pointer',
+                                    ].join(' ')}
+                                    style={{ fontFamily: 'system-ui,sans-serif' }}
+                                >
+                                    Next →
                                 </button>
                             </div>
-                        )}
 
-                        {/* Click hint — updated to say transliteration not translation */}
-                        {!loading && !error && lines.length > 0 && (
-                            <p
-                                className="text-white/25 text-xs mb-5 text-right"
+                            <div className="border-t border-white/10" />
+
+                            {/* Page jump */}
+                            <form onSubmit={handleSubmit} className="flex items-center gap-2">
+                                <label
+                                    htmlFor="ang-input"
+                                    className="text-white/45 text-sm select-none shrink-0"
+                                    style={{ fontFamily: 'system-ui,sans-serif' }}
+                                >
+                                    Page
+                                </label>
+                                <input
+                                    id="ang-input"
+                                    type="number"
+                                    min={MIN_ANG}
+                                    max={MAX_ANG}
+                                    value={inputVal}
+                                    onChange={(e) => setInputVal(e.target.value)}
+                                    className="flex-1 text-center text-white text-sm
+                                               bg-white/10 border border-white/25 rounded-xl px-2 py-1.5
+                                               focus:outline-none focus:border-white/50 focus:bg-white/15
+                                               transition-colors [appearance:textfield]
+                                               [&::-webkit-inner-spin-button]:appearance-none
+                                               [&::-webkit-outer-spin-button]:appearance-none"
+                                    style={{ fontFamily: 'system-ui,sans-serif' }}
+                                />
+                                <ToolbarBtn type="submit">Go</ToolbarBtn>
+                            </form>
+
+                            <div className="border-t border-white/10" />
+
+                            {/* Translit toggle */}
+                            <div className="flex items-center justify-between">
+                                <span className="text-white/50 text-sm"
+                                    style={{ fontFamily: 'system-ui,sans-serif' }}>
+                                    Transliteration
+                                </span>
+                                <ToggleBtn active={showTrans} onClick={() => setShowTrans(v => !v)}>
+                                    {showTrans ? 'On' : 'Off'}
+                                </ToggleBtn>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+                {/* ── RIGHT COLUMN 2/3 — Shabad content ── */}
+                <div className="col-span-2">
+                    <div
+                        className="w-full rounded-3xl border border-white/15 overflow-hidden"
+                        style={{
+                            background: 'rgba(255,255,255,0.06)',
+                            backdropFilter: 'blur(24px) saturate(160%)',
+                            WebkitBackdropFilter: 'blur(24px) saturate(160%)',
+                            boxShadow: '0 32px 80px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.12)',
+                        }}
+                    >
+                        {/* Card header */}
+                        <div
+                            className="px-8 py-4 border-b border-white/10 flex items-center justify-between"
+                            style={{ background: 'rgba(255,255,255,0.04)' }}
+                        >
+                            <span
+                                className="text-white font-semibold text-base"
                                 style={{ fontFamily: 'system-ui,sans-serif' }}
                             >
-                                Tap any line for transliteration
-                            </p>
-                        )}
+                                Page {angNum}
+                            </span>
+                            <span
+                                className="text-white/25 text-xs"
+                                style={{ fontFamily: 'system-ui,sans-serif' }}
+                            >
+                                {angNum} / {MAX_ANG}
+                            </span>
+                        </div>
 
-                        {/* Lines */}
-                        {!loading && !error && lines.length > 0 && (
-                            <div className="divide-y divide-white/[0.06]">
-                                {lines.map((line, i) => (
-                                    <VerseBlock
-                                        key={line.id ?? i}
-                                        line={line}
-                                        showTrans={showTrans}
-                                        // showMeaning={showMeaning}   // ← removed
-                                        onWordClick={(word) => handleWordClick(line, word)}
-                                    />
-                                ))}
+                        {/* Card body */}
+                        <div className="px-8 py-7">
+                            {loading && (
+                                <div className="flex justify-center py-16">
+                                    <div className="w-8 h-8 rounded-full border-2 border-white/15
+                                                    border-t-white/70 animate-spin" />
+                                </div>
+                            )}
+
+                            {!loading && error && (
+                                <div className="text-center py-12 space-y-3">
+                                    <p className="text-white/45 text-sm"
+                                        style={{ fontFamily: 'system-ui,sans-serif' }}>
+                                        {error}
+                                    </p>
+                                    <button
+                                        onClick={() => goToAng(angNum)}
+                                        className="px-4 py-2 rounded-xl text-sm text-white/60
+                                                   border border-white/20 hover:bg-white/10 transition-colors"
+                                        style={{ fontFamily: 'system-ui,sans-serif' }}
+                                    >
+                                        Retry
+                                    </button>
+                                </div>
+                            )}
+
+                            {!loading && !error && lines.length > 0 && (
+                                <p className="text-white/25 text-xs mb-5 text-right"
+                                    style={{ fontFamily: 'system-ui,sans-serif' }}>
+                                    Tap any line for transliteration
+                                </p>
+                            )}
+
+                            {!loading && !error && lines.length > 0 && (
+                                <div className="divide-y divide-white/[0.06]">
+                                    {lines.map((line, i) => (
+                                        <VerseBlock
+                                            key={line.id ?? i}
+                                            line={line}
+                                            showTrans={showTrans}
+                                            onWordClick={(word) => handleWordClick(line, word)}
+                                        />
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+
+                        {/* Card footer */}
+                        {!loading && lines.length > 0 && (
+                            <div
+                                className="px-8 py-4 border-t border-white/10 flex justify-between"
+                                style={{ background: 'rgba(255,255,255,0.03)' }}
+                            >
+                                <ToolbarBtn disabled={atStart} onClick={() => goToAng(angNum - 1)}>
+                                    ← Previous Page
+                                </ToolbarBtn>
+                                <ToolbarBtn disabled={atEnd} onClick={() => goToAng(angNum + 1)}>
+                                    Next Page →
+                                </ToolbarBtn>
                             </div>
                         )}
                     </div>
-
-                    {/* Card footer */}
-                    {!loading && lines.length > 0 && (
-                        <div
-                            className="px-8 py-4 border-t border-white/10 flex justify-between"
-                            style={{ background: 'rgba(255,255,255,0.03)' }}
-                        >
-                            <ToolbarBtn disabled={atStart} onClick={() => goToAng(angNum - 1)}>
-                                ← Previous Page
-                            </ToolbarBtn>
-                            <ToolbarBtn disabled={atEnd} onClick={() => goToAng(angNum + 1)}>
-                                Next Page →
-                            </ToolbarBtn>
-                        </div>
-                    )}
                 </div>
+
             </div>
 
             {/* ── MeaningBox popup ── */}
@@ -274,14 +329,13 @@ export default function Reader() {
 }
 
 // ─── Verse block ──────────────────────────────────────────────────────────────
-function VerseBlock({ line, showTrans, /* showMeaning, */ onWordClick }) {
+function VerseBlock({ line, showTrans, onWordClick }) {
     if (!line.gurmukhi) return null;
 
     const words = line.gurmukhi.split(' ').filter(Boolean);
 
     return (
         <div className="py-5 first:pt-0 last:pb-0">
-            {/* Gurmukhi words */}
             <p
                 className="leading-loose mb-1"
                 style={{
@@ -308,7 +362,6 @@ function VerseBlock({ line, showTrans, /* showMeaning, */ onWordClick }) {
                 ))}
             </p>
 
-            {/* Transliteration toggle */}
             {showTrans && line.translit && (
                 <p
                     className="text-white/50 text-sm italic mt-1.5 leading-relaxed"
@@ -317,17 +370,6 @@ function VerseBlock({ line, showTrans, /* showMeaning, */ onWordClick }) {
                     {line.translit}
                 </p>
             )}
-
-            {/* English translation — removed site-wide
-            {showMeaning && line.translation && (
-                <p
-                    className="text-white/38 text-sm mt-1.5 leading-relaxed
-                               pl-3 border-l-2 border-white/15"
-                    style={{ fontFamily: 'system-ui,-apple-system,sans-serif' }}
-                >
-                    {line.translation}
-                </p>
-            )} */}
         </div>
     );
 }

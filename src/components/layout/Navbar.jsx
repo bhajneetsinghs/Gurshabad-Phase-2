@@ -1,17 +1,17 @@
 import { Link, useLocation } from "react-router-dom";
 import { useState } from "react";
-
+import logo from "../../assets/images/logoG.jpeg";
 export default function Navbar() {
     const [open, setOpen] = useState(false);
     const location = useLocation();
 
     const nav = [
-        { name: "Home",     path: "/" },
-        { name: "Courses",  path: "/courses" },
-        { name: "Guide",    path: "/guide" },
+        { name: "Home", path: "/" },
+        { name: "Courses", path: "/courses" },
+        { name: "Guide", path: "/guide" },
         { name: "Flow Map", path: "/flow-map" },
         { name: "Articles", path: "/articles" },
-        { name: "About",    path: "/about" },
+        { name: "About", path: "/about" },
     ];
 
     return (
@@ -27,20 +27,18 @@ export default function Navbar() {
                 <Link to="/" style={{ textDecoration: "none" }}
                     className="md:absolute md:left-6 flex items-center gap-2"
                 >
-                    <div style={{
-                        width: 34, height: 34,
-                        borderRadius: 10,
-                        background: "linear-gradient(135deg, rgba(212,175,55,0.9), rgba(232,201,122,0.65))",
-                        display: "flex", alignItems: "center", justifyContent: "center",
-                        boxShadow: "0 0 14px rgba(212,175,55,0.28), inset 0 1px 0 rgba(255,255,255,0.3)",
-                        fontSize: 16,
-                        fontFamily: "'Noto Sans Gurmukhi', serif",
-                        color: "#080c18",
-                        fontWeight: 700,
-                        flexShrink: 0,
-                    }}>
-                        ਗ
-                    </div>
+                    <img
+                        src={logo}
+                        alt="Gurshabad Logo"
+                        style={{
+                            width: 44,
+                            height: 44,
+                            borderRadius: 10,
+                            objectFit: "cover",
+                            boxShadow: "0 0 14px rgba(212,175,55,0.28)",
+                            flexShrink: 0,
+                        }}
+                    />
                     <span style={{
                         fontFamily: "system-ui, sans-serif",
                         fontSize: "0.8rem",

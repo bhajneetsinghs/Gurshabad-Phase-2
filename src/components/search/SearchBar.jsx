@@ -16,6 +16,7 @@ const MAP = {
   K:'ਖ',L:'ਲ਼',M:'ੰ',N:'ਣ',O:'ਓ',P:'ਫ਼',Q:'ਕ਼',R:'ੜ',S:'ਸ਼',T:'ਟ',
   U:'ਊ',V:'ਵ',W:'ਵ',X:'ਖ਼',Y:'ਯ',Z:'ਗ਼',
 };
+
 function romanToGurmukhi(s) {
   return s.replace(/[0-9A-Za-z]/g, ch =>
     /[0-9]/.test(ch) ? DIG[+ch] : (MAP[ch] || ch)
@@ -24,8 +25,10 @@ function romanToGurmukhi(s) {
 
 export default function SearchBar({
     initialQuery = '',
-    initialType  = '2',
+    initialType  = '1',
     hideDropdown = false,
+    compact      = false,
+    hideHint     = false,
 }) {
     const navigate = useNavigate();
 
@@ -41,7 +44,6 @@ export default function SearchBar({
     const timerRef = useRef(null);
     const tokenRef = useRef(0);
 
-    // Sync when URL params change
     useEffect(() => {
         setQuery(initialQuery);
         setSearchType(initialType);
@@ -123,9 +125,9 @@ export default function SearchBar({
     }, []);
 
     const placeholder = {
-        '1': 'ਪਹਿਲੇ ਅੱਖਰ ਟਾਈਪ ਕਰੋ…',
-        '2': 'ਗੁਰਬਾਣੀ ਖੋਜ ਕਰੋ…',
-        '5': 'ਅੰਗ ਨੰਬਰ ਦਰਜ ਕਰੋ…',
+        '1': 'ਪਹਿਲੇ ਅੱਖਰ…',
+        '2': 'ਗੁਰਬਾਣੀ ਖੋਜ…',
+        '5': 'ਅੰਗ ਨੰਬਰ…',
     }[searchType] ?? 'Search…';
 
     const useGurmukhiInput = isGurmukhiType(searchType);
@@ -134,31 +136,28 @@ export default function SearchBar({
         <div ref={wrapRef} className="relative w-full">
             <form
                 onSubmit={handleSubmit}
-                className="flex flex-row flex-nowrap items-center gap-3
-                   px-4 py-3 rounded-2xl
-                   border border-white/18 bg-white/[0.06]
-                   backdrop-blur-lg"
+                className={`flex flex-row flex-nowrap items-center gap-2
+                   border border-white/18 bg-white/[0.06] backdrop-blur-lg
+                   ${compact ? 'px-2 py-1 rounded-xl' : 'px-4 py-3 rounded-2xl'}`}
             >
                 <select
                     value={searchType}
                     onChange={handleTypeChange}
                     aria-label="Search type"
-                    className="flex-none appearance-none
-                     border border-white/25 rounded-xl
-                     bg-white/10 text-white
-                     px-3 py-2 pr-8 text-sm
-                     focus:outline-none focus:bg-[rgb(0,23,49)]
-                     hover:bg-white/15 cursor-pointer transition-colors"
+                    className={`flex-none appearance-none border border-white/25 rounded-lg
+                     bg-white/10 text-white focus:outline-none focus:bg-[rgb(0,23,49)]
+                     hover:bg-white/15 cursor-pointer transition-colors
+                     ${compact ? 'px-1.5 py-0.5 text-xs pr-5' : 'px-3 py-2 pr-8 text-sm'}`}
                     style={{
                         fontFamily: UI_FONT,
                         backgroundImage: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='rgba(255,255,255,.55)'/%3E%3C/svg%3E\")",
                         backgroundRepeat: 'no-repeat',
-                        backgroundPosition: 'right 10px center',
+                        backgroundPosition: 'right 6px center',
                     }}
                 >
-                    <option value="1">First Letter (Anywhere)</option>
-                    <option value="2">Full Word (Gurmukhi)</option>
-                    <option value="5">Page Number</option>
+                    <option value="1">First Letter(Anywhere)</option>
+                    <option value="2">Full Word(Gurmukhi)</option>
+                    <option value="5">Page No.</option>
                 </select>
 
                 <input
@@ -174,48 +173,46 @@ export default function SearchBar({
                     dir="ltr"
                     lang={useGurmukhiInput ? 'pa' : 'en'}
                     placeholder={placeholder}
-                    className="flex-1 min-w-0
-                     border border-white/25 rounded-xl
+                    className={`flex-1 min-w-0 border border-white/25 rounded-lg
                      bg-white/10 text-white placeholder-white/40
-                     px-3 py-2 text-base
                      focus:outline-none focus:bg-white/14 focus:border-white/45
-                     focus:ring-[3px] focus:ring-white/8
-                     transition-all duration-150
+                     focus:ring-[3px] focus:ring-white/8 transition-all duration-150
                      [&::-webkit-search-cancel-button]:appearance-none
-                     [&::-webkit-search-decoration]:hidden"
+                     [&::-webkit-search-decoration]:hidden
+                     ${compact ? 'px-2 py-0.5 text-xs' : 'px-3 py-2 text-base'}`}
                     style={{
                         fontFamily: useGurmukhiInput ? GURBANI_FONT : UI_FONT,
                         letterSpacing: useGurmukhiInput ? '0.15px' : 'normal',
-                        fontSize: useGurmukhiInput ? '1.05rem' : '1rem',
+                        fontSize: compact ? '0.75rem' : useGurmukhiInput ? '1.05rem' : '1rem',
                     }}
                 />
 
                 <button
                     type="submit"
-                    className="flex-none px-5 py-2 rounded-xl text-sm font-medium
-                     border border-white/25 bg-white/15 text-white
-                     hover:bg-white/24 hover:border-white/45
-                     active:scale-95 transition-all cursor-pointer"
+                    className={`flex-none rounded-lg font-medium border border-white/25
+                     bg-white/15 text-white hover:bg-white/24 hover:border-white/45
+                     active:scale-95 transition-all cursor-pointer
+                     ${compact ? 'px-2 py-0.5 text-xs' : 'px-5 py-2 text-sm'}`}
                     style={{ fontFamily: UI_FONT }}
                 >
                     Search
                 </button>
             </form>
 
-            {searchType === '1' && (
+            {/* ← hint text now uses hideHint prop */}
+            {!hideHint && !compact && searchType === '1' && (
                 <p className="mt-1.5 text-white/25 text-xs text-center"
                     style={{ fontFamily: GURBANI_FONT }}>
                     ਹਰ ਸ਼ਬਦ ਦਾ ਪਹਿਲਾ ਅੱਖਰ ਟਾਈਪ ਕਰੋ — ਅੰਗਰੇਜ਼ੀ ਵਿੱਚ ਟਾਈਪ ਕਰੋ, ਗੁਰਮੁਖੀ ਵਿੱਚ ਬਦਲੇਗਾ
                 </p>
             )}
-            {searchType === '2' && (
+            {!hideHint && !compact && searchType === '2' && (
                 <p className="mt-1.5 text-white/25 text-xs text-center"
                     style={{ fontFamily: GURBANI_FONT }}>
                     ਅੰਗਰੇਜ਼ੀ ਵਿੱਚ ਟਾਈਪ ਕਰੋ — ਗੁਰਮੁਖੀ ਵਿੱਚ ਬਦਲੇਗਾ
                 </p>
             )}
 
-            {/* Dropdown — hidden on SearchResults page */}
             {!hideDropdown && showDropdown && query.trim().length > 0 && searchType !== '5' && (
                 <div
                     className="absolute left-0 right-0 top-full mt-2 z-50
@@ -271,7 +268,7 @@ export default function SearchBar({
                                     {ang && (
                                         <span className="flex-none text-white/30 text-xs"
                                             style={{ fontFamily: GURBANI_FONT }}>
-                                            ਅੰਗ {ang}
+                                            ਪੰਨਾ {ang}
                                         </span>
                                     )}
                                 </div>

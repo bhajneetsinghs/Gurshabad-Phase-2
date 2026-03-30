@@ -175,7 +175,7 @@ function SectionTile({ raagName, section, onClick }) {
                     fontSize: '0.88rem',
                 }}
             >
-                ਅੰਗ {toGurmukhi(section.ang_start)}–{toGurmukhi(section.ang_end)}
+                ਪੰਨਾ {toGurmukhi(section.ang_start)}–{toGurmukhi(section.ang_end)}
             </span>
 
             {/* Arrow hint */}

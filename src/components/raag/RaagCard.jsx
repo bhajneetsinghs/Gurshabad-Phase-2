@@ -67,29 +67,29 @@ export default function RaagCard({ raag, isActive, onClick, style }) {
           `,
         boxShadow: isActive
           ? [
-              // outer face of frost ring
-              "0 0 0 1.5px rgba(255,255,255,0.95)",
-              "0 0 0 4px rgba(210,232,255,0.40)",
-              "0 0 0 6px rgba(255,255,255,0.12)",
-              // inner edge where frost meets glass card
-              "inset 0 0 0 1px rgba(255,255,255,0.88)",
-              // top/left lit bevels on ring
-              "inset 0 3px 8px rgba(255,255,255,0.70)",
-              "inset 3px 0 8px rgba(255,255,255,0.45)",
-              // bottom/right shadow bevels
-              "inset 0 -3px 8px rgba(170,200,240,0.35)",
-              "inset -3px 0 8px rgba(170,200,240,0.25)",
-            ].join(",")
+            // outer face of frost ring
+            "0 0 0 1.5px rgba(255,255,255,0.95)",
+            "0 0 0 4px rgba(210,232,255,0.40)",
+            "0 0 0 6px rgba(255,255,255,0.12)",
+            // inner edge where frost meets glass card
+            "inset 0 0 0 1px rgba(255,255,255,0.88)",
+            // top/left lit bevels on ring
+            "inset 0 3px 8px rgba(255,255,255,0.70)",
+            "inset 3px 0 8px rgba(255,255,255,0.45)",
+            // bottom/right shadow bevels
+            "inset 0 -3px 8px rgba(170,200,240,0.35)",
+            "inset -3px 0 8px rgba(170,200,240,0.25)",
+          ].join(",")
           : [
-              "0 0 0 1px rgba(255,255,255,0.80)",
-              "0 0 0 3px rgba(210,232,255,0.28)",
-              "inset 0 0 0 1px rgba(255,255,255,0.72)",
-              "inset 0 2px 6px rgba(255,255,255,0.55)",
-              "inset 2px 0 6px rgba(255,255,255,0.35)",
-              "inset 0 -2px 6px rgba(170,200,240,0.25)",
-            ].join(","),
+            "0 0 0 1px rgba(255,255,255,0.80)",
+            "0 0 0 3px rgba(210,232,255,0.28)",
+            "inset 0 0 0 1px rgba(255,255,255,0.72)",
+            "inset 0 2px 6px rgba(255,255,255,0.55)",
+            "inset 2px 0 6px rgba(255,255,255,0.35)",
+            "inset 0 -2px 6px rgba(170,200,240,0.25)",
+          ].join(","),
         pointerEvents: "none",
-      }}/>
+      }} />
 
       {/* ═══ LAYER 2: frost ring specular streaks ═══ */}
       {/* Diagonal light streak across ring */}
@@ -103,7 +103,7 @@ export default function RaagCard({ raag, isActive, onClick, style }) {
           rgba(200,225,255,0.30) 90%,
           rgba(255,255,255,0.15) 100%)`,
         pointerEvents: "none",
-      }}/>
+      }} />
 
       {/* ═══ LAYER 3: inner glass card ═══ */}
       <article
@@ -149,7 +149,7 @@ export default function RaagCard({ raag, isActive, onClick, style }) {
               rgba(255,255,255,0.12) 30%,
               rgba(230,244,255,0.06) 100%)
           `,
-        }}/>
+        }} />
 
         {/* TL bright lens */}
         <div aria-hidden style={{
@@ -161,7 +161,7 @@ export default function RaagCard({ raag, isActive, onClick, style }) {
             rgba(215,238,255,0.50) 18%,
             rgba(255,255,255,0.12) 45%,
             transparent 65%)`,
-        }}/>
+        }} />
         {/* TR lens */}
         <div aria-hidden style={{
           position: "absolute", top: 0, right: 0,
@@ -171,7 +171,7 @@ export default function RaagCard({ raag, isActive, onClick, style }) {
             rgba(255,255,255,0.62) 0%,
             rgba(255,255,255,0.14) 38%,
             transparent 62%)`,
-        }}/>
+        }} />
         {/* BR cold lens */}
         <div aria-hidden style={{
           position: "absolute", bottom: 0, right: 0,
@@ -181,7 +181,7 @@ export default function RaagCard({ raag, isActive, onClick, style }) {
             rgba(185,216,255,0.48) 0%,
             rgba(210,232,255,0.18) 36%,
             transparent 60%)`,
-        }}/>
+        }} />
 
         {/* Glass face surface sheen — horizontal band mid-card */}
         <div aria-hidden style={{
@@ -193,7 +193,7 @@ export default function RaagCard({ raag, isActive, onClick, style }) {
             transparent 100%)`,
           maskImage: "linear-gradient(90deg, transparent 0%, white 15%, white 85%, transparent 100%)",
           WebkitMaskImage: "linear-gradient(90deg, transparent 0%, white 15%, white 85%, transparent 100%)",
-        }}/>
+        }} />
 
         {/* Inactive veil */}
         {!isActive && (
@@ -203,7 +203,7 @@ export default function RaagCard({ raag, isActive, onClick, style }) {
             backdropFilter: "blur(12px) saturate(115%)",
             WebkitBackdropFilter: "blur(12px) saturate(115%)",
             background: "rgba(225,236,252,0.12)",
-          }}/>
+          }} />
         )}
 
         {/* Content */}
@@ -229,7 +229,7 @@ export default function RaagCard({ raag, isActive, onClick, style }) {
             color: "rgba(10,16,28,0.46)",
             textShadow: "0 1px 0 rgba(255,255,255,0.60)",
           }}>
-            ਅੰਗ {toGurmukhi(raag.ang)}
+            ਪੰਨਾ  {toGurmukhi(raag.ang)}
           </p>
         </div>
       </article>

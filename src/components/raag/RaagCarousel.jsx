@@ -348,7 +348,7 @@ function CardFace({ raag, isActive }) {
               fontSize: "clamp(0.85rem, 2vw, 1.05rem)",
               color: "rgba(230,238,255,0.85)",
             }}>
-              ਅੰਗ {toGurmukhi(raag.ang)}
+              ਪੰਨਾ {toGurmukhi(raag.ang)}
             </span>
           </div>
 

@@ -51,7 +51,7 @@ export default function SearchResults() {
     return (
         <div className="max-w-[min(1200px,96vw)] mx-auto px-4 pb-16 pt-6">
 
-            {/* Back */}
+            {/* Back
             <Link
                 to="/"
                 className="inline-flex items-center gap-1.5 text-white/40
@@ -59,7 +59,7 @@ export default function SearchResults() {
                 style={{ fontFamily: UI_FONT }}
             >
                 ← Home
-            </Link>
+            </Link> */}
 
             {/* SearchBar pre-filled with searched keyword */}
             <div className="mb-6">
