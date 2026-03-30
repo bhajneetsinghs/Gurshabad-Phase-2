@@ -2,12 +2,13 @@ import { useEffect, useState, useRef, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getAng, parseAngData } from '../services/gurbaniApi';
 import MeaningBox from '../components/reader/MeaningBox';
-import { Link } from 'react-router-dom';
 import SearchBar from '../components/search/SearchBar';
 
 const MIN_ANG = 1;
 const MAX_ANG = 1430;
-const GURBANI_FONT = "'Noto Sans Gurmukhi','Gurmukhi MN','Kohinoor Gurmukhi','AnmolLipi',sans-serif";
+const GURBANI_FONT =
+    "'Noto Sans Gurmukhi','Gurmukhi MN','Kohinoor Gurmukhi','AnmolLipi',sans-serif";
+
 const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
 
 export default function Reader() {
@@ -28,6 +29,7 @@ export default function Reader() {
         if (abortRef.current) abortRef.current.abort();
         const ctrl = new AbortController();
         abortRef.current = ctrl;
+
         setLoading(true);
         setError(null);
         setLines([]);
@@ -39,12 +41,17 @@ export default function Reader() {
             .then((raw) => {
                 if (ctrl.signal.aborted) return;
                 if (Array.isArray(raw?.page)) setRawPage(raw.page);
+
                 const parsed = parseAngData(raw);
                 if (!parsed.length) setError(`No content found for Ang ${angNum}.`);
                 else setLines(parsed);
             })
-            .catch((err) => { if (!ctrl.signal.aborted) setError(err.message); })
-            .finally(() => { if (!ctrl.signal.aborted) setLoading(false); });
+            .catch((err) => {
+                if (!ctrl.signal.aborted) setError(err.message);
+            })
+            .finally(() => {
+                if (!ctrl.signal.aborted) setLoading(false);
+            });
 
         return () => ctrl.abort();
     }, [angNum]);
@@ -61,21 +68,25 @@ export default function Reader() {
     }
 
     useEffect(() => {
-        const h = (e) => {
+        const handleKey = (e) => {
             if (e.target.tagName === 'INPUT') return;
             if (meaningData) return;
-            if (e.key === 'ArrowLeft') { e.preventDefault(); goToAng(angNum - 1); }
-            if (e.key === 'ArrowRight') { e.preventDefault(); goToAng(angNum + 1); }
+
+            if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                goToAng(angNum - 1);
+            }
+            if (e.key === 'ArrowRight') {
+                e.preventDefault();
+                goToAng(angNum + 1);
+            }
         };
-        window.addEventListener('keydown', h);
-        return () => window.removeEventListener('keydown', h);
+
+        window.addEventListener('keydown', handleKey);
+        return () => window.removeEventListener('keydown', handleKey);
     }, [angNum, goToAng, meaningData]);
 
-    function handleWordClick(line, clickedWord) {
-        const rawItem = rawPage.find(
-            (item) => item.verseId === line.id ||
-                item.verse?.unicode === line.gurmukhi
-        );
+    function handleWordClick(line) {
         setMeaningData({
             gurmukhiText: line.gurmukhi,
             transliteration: line.translit || '',
@@ -86,37 +97,146 @@ export default function Reader() {
     const atEnd = angNum >= MAX_ANG;
 
     return (
-        <div className="min-h-screen">
+        <div className="min-h-screen pt-6">
 
-            {/* ── Sticky toolbar ── */}
-            <div className="sticky top-16 z-40 border-b border-white/10 bg-black/60 backdrop-blur-xl">
-                <div className="max-w-[min(1200px,95vw)] mx-auto px-4 py-2 flex items-center">
-                    <span className="text-white/30 text-xs"
-                        style={{ fontFamily: 'system-ui,sans-serif' }}>
-                        Ang {angNum} / {MAX_ANG}
-                    </span>
+            {/* Navigation Box */}
+        
+            <div className="w-full max-w-6xl mx-auto mb-6">
+                <div
+                    className="rounded-2xl p-4 flex flex-col gap-4"
+                    style={{
+                        background: 'rgba(255,255,255,0.04)',
+                        border: '1px solid rgba(212,175,55,0.15)',
+                        backdropFilter: 'blur(16px)',
+                    }}
+                >
+                    {/* Top row */}
+                    <div className="flex items-center justify-between">
+                        <p
+                            className="text-xs uppercase tracking-widest"
+                            style={{ color: 'rgba(212,175,55,0.7)' }}
+                        >
+                            Navigation
+                        </p>
+
+                        <span className="text-xs opacity-50">
+                            {angNum} / {MAX_ANG}
+                        </span>
+                    </div>
+
+                    {/* Controls */}
+                    <div className="flex items-center gap-2">
+                        <button
+                            disabled={atStart}
+                            onClick={() => goToAng(angNum - 1)}
+                            className="flex-1 py-2 rounded-xl text-sm transition active:scale-95"
+                            style={{
+                                background: atStart
+                                    ? 'rgba(255,255,255,0.05)'
+                                    : 'rgba(212,175,55,0.12)',
+                                color: atStart
+                                    ? 'rgba(255,255,255,0.3)'
+                                    : 'rgba(212,175,55,0.9)',
+                                border: '1px solid rgba(212,175,55,0.2)',
+                                cursor: atStart ? 'not-allowed' : 'pointer',
+                            }}
+                        >
+                            ← Prev
+                        </button>
+
+                        <form onSubmit={handleSubmit} className="flex gap-2 ">
+                            <input
+                                type="number"
+                                min={MIN_ANG}
+                                max={MAX_ANG}
+                                value={inputVal}
+                                onChange={(e) => setInputVal(e.target.value)}
+                                className="w-full text-center text-sm rounded-xl px-2 py-2 focus:outline-none"
+                                style={{
+                                    background: 'rgba(255,255,255,0.06)',
+                                    border: '1px solid rgba(212,175,55,0.2)',
+                                    color: 'white',
+                                }}
+                            />
+                            <button
+                                type="submit"
+                                className="px-4 py-2 rounded-xl text-sm"
+                                style={{
+                                    background: 'rgba(212,175,55,0.15)',
+                                    border: '1px solid rgba(212,175,55,0.3)',
+                                    color: 'rgba(212,175,55,0.9)',
+                                }}
+                            >
+                                Go
+                            </button>
+                        </form>
+
+                        <button
+                            disabled={atEnd}
+                            onClick={() => goToAng(angNum + 1)}
+                            className="flex-1 py-2 rounded-xl text-sm transition active:scale-95"
+                            style={{
+                                background: atEnd
+                                    ? 'rgba(255,255,255,0.05)'
+                                    : 'rgba(212,175,55,0.12)',
+                                color: atEnd
+                                    ? 'rgba(255,255,255,0.3)'
+                                    : 'rgba(212,175,55,0.9)',
+                                border: '1px solid rgba(212,175,55,0.2)',
+                                cursor: atEnd ? 'not-allowed' : 'pointer',
+                            }}
+                        >
+                            Next →
+                        </button>
+                    </div>
+
+                    {/* Toggle */}
+                    <div className="flex items-center justify-between pt-2 border-t border-white/5">
+                        <span className="text-xs opacity-60">Transliteration</span>
+
+                        <button
+                            onClick={() => setShowTrans(v => !v)}
+                            className="px-3 py-1 text-xs rounded-full transition"
+                            style={{
+                                background: showTrans
+                                    ? 'rgba(212,175,55,0.2)'
+                                    : 'rgba(255,255,255,0.06)',
+                                border: '1px solid rgba(255,255,255,0.1)',
+                                color: showTrans
+                                    ? 'rgba(212,175,55,0.9)'
+                                    : 'rgba(255,255,255,0.5)',
+                            }}
+                        >
+                            {showTrans ? 'On' : 'Off'}
+                        </button>
+                    </div>
                 </div>
             </div>
 
-            {/* ── TWO COLUMN LAYOUT ── */}
-            <div className="max-w-[min(1200px,95vw)] mx-auto px-4 py-8
-                            grid grid-cols-3 gap-6 items-start">
-
-                {/* ── LEFT COLUMN 1/3 — Search + Nav ── */}
-                <div className="col-span-1 sticky top-32 flex flex-col gap-4">
-
-                    {/* Search box */}
+            {/* Two Column Layout */}
+            <div className="max-w-[min(1200px,95vw)] mx-auto px-4 py-8 grid grid-cols-3 gap-6 items-start">
+                {/* Left Column */}
+                <div className="col-span-1 sticky top-24 flex flex-col gap-4">
                     <div
-                        className="rounded-2xl border border-white/15 overflow-hidden"
+                        className="rounded-2xl overflow-hidden"
                         style={{
-                            background: 'rgba(255,255,255,0.04)',
-                            backdropFilter: 'blur(24px)',
-                            WebkitBackdropFilter: 'blur(24px)',
+                            background: 'rgba(255,255,255,0.07)',
+                            border: '1px solid rgba(212,175,55,0.2)',
+                            boxShadow: '0 8px 32px rgba(0,0,0,0.4)',
                         }}
                     >
-                        <div className="px-4 py-2.5 border-b border-white/10">
-                            <p className="text-white/50 text-xs uppercase tracking-widest"
-                                style={{ fontFamily: 'system-ui,sans-serif' }}>
+                        <div
+                            className="px-4 py-3 flex items-center gap-2"
+                            style={{ borderBottom: '1px solid rgba(212,175,55,0.12)' }}
+                        >
+                            <div
+                                className="w-1.5 h-1.5 rounded-full"
+                                style={{ background: 'rgba(212,175,55,0.8)' }}
+                            />
+                            <p
+                                className="text-xs uppercase tracking-widest font-semibold"
+                                style={{ fontFamily: 'system-ui,sans-serif', color: 'rgba(212,175,55,0.8)' }}
+                            >
                                 Search Gurbani
                             </p>
                         </div>
@@ -124,153 +244,54 @@ export default function Reader() {
                             <SearchBar hideDropdown hideHint />
                         </div>
                     </div>
-
-                    {/* Nav controls */}
-                    <div
-                        className="rounded-2xl border border-white/15 overflow-hidden"
-                        style={{
-                            background: 'rgba(255,255,255,0.04)',
-                            backdropFilter: 'blur(24px)',
-                            WebkitBackdropFilter: 'blur(24px)',
-                        }}
-                    >
-                        <div className="px-4 py-2.5 border-b border-white/10">
-                            <p className="text-white/50 text-xs uppercase tracking-widest"
-                                style={{ fontFamily: 'system-ui,sans-serif' }}>
-                                Navigation
-                            </p>
-                        </div>
-                        <div className="p-4 flex flex-col gap-4">
-
-                            {/* Previous / Next — full width */}
-                            <div className="grid grid-cols-2 gap-2">
-                                <button
-                                    disabled={atStart}
-                                    onClick={() => goToAng(angNum - 1)}
-                                    className={[
-                                        'py-2 rounded-xl text-sm text-center',
-                                        'border border-white/18 bg-white/[0.07] text-white/70',
-                                        'hover:bg-white/14 hover:text-white hover:border-white/30',
-                                        'active:scale-95 transition-all duration-150',
-                                        atStart ? 'opacity-20 pointer-events-none' : 'cursor-pointer',
-                                    ].join(' ')}
-                                    style={{ fontFamily: 'system-ui,sans-serif' }}
-                                >
-                                    ← Previous
-                                </button>
-                                <button
-                                    disabled={atEnd}
-                                    onClick={() => goToAng(angNum + 1)}
-                                    className={[
-                                        'py-2 rounded-xl text-sm text-center',
-                                        'border border-white/18 bg-white/[0.07] text-white/70',
-                                        'hover:bg-white/14 hover:text-white hover:border-white/30',
-                                        'active:scale-95 transition-all duration-150',
-                                        atEnd ? 'opacity-20 pointer-events-none' : 'cursor-pointer',
-                                    ].join(' ')}
-                                    style={{ fontFamily: 'system-ui,sans-serif' }}
-                                >
-                                    Next →
-                                </button>
-                            </div>
-
-                            <div className="border-t border-white/10" />
-
-                            {/* Page jump */}
-                            <form onSubmit={handleSubmit} className="flex items-center gap-2">
-                                <label
-                                    htmlFor="ang-input"
-                                    className="text-white/45 text-sm select-none shrink-0"
-                                    style={{ fontFamily: 'system-ui,sans-serif' }}
-                                >
-                                    Page
-                                </label>
-                                <input
-                                    id="ang-input"
-                                    type="number"
-                                    min={MIN_ANG}
-                                    max={MAX_ANG}
-                                    value={inputVal}
-                                    onChange={(e) => setInputVal(e.target.value)}
-                                    className="flex-1 text-center text-white text-sm
-                                               bg-white/10 border border-white/25 rounded-xl px-2 py-1.5
-                                               focus:outline-none focus:border-white/50 focus:bg-white/15
-                                               transition-colors [appearance:textfield]
-                                               [&::-webkit-inner-spin-button]:appearance-none
-                                               [&::-webkit-outer-spin-button]:appearance-none"
-                                    style={{ fontFamily: 'system-ui,sans-serif' }}
-                                />
-                                <ToolbarBtn type="submit">Go</ToolbarBtn>
-                            </form>
-
-                            <div className="border-t border-white/10" />
-
-                            {/* Translit toggle */}
-                            <div className="flex items-center justify-between">
-                                <span className="text-white/50 text-sm"
-                                    style={{ fontFamily: 'system-ui,sans-serif' }}>
-                                    Transliteration
-                                </span>
-                                <ToggleBtn active={showTrans} onClick={() => setShowTrans(v => !v)}>
-                                    {showTrans ? 'On' : 'Off'}
-                                </ToggleBtn>
-                            </div>
-
-                        </div>
-                    </div>
-
                 </div>
 
-                {/* ── RIGHT COLUMN 2/3 — Shabad content ── */}
+                {/* Right Column */}
                 <div className="col-span-2">
                     <div
-                        className="w-full rounded-3xl border border-white/15 overflow-hidden"
+                        className="w-full rounded-3xl overflow-hidden"
                         style={{
-                            background: 'rgba(255,255,255,0.06)',
+                            background: 'rgba(255,255,255,0.05)',
+                            border: '1px solid rgba(212,175,55,0.15)',
                             backdropFilter: 'blur(24px) saturate(160%)',
                             WebkitBackdropFilter: 'blur(24px) saturate(160%)',
-                            boxShadow: '0 32px 80px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.12)',
+                            boxShadow: '0 32px 80px rgba(0,0,0,0.55), inset 0 1px 0 rgba(212,175,55,0.08)',
                         }}
                     >
-                        {/* Card header */}
+                        {/* Card Header */}
                         <div
-                            className="px-8 py-4 border-b border-white/10 flex items-center justify-between"
-                            style={{ background: 'rgba(255,255,255,0.04)' }}
+                            className="px-8 py-4 flex items-center justify-between"
+                            style={{ background: 'rgba(212,175,55,0.05)', borderBottom: '1px solid rgba(212,175,55,0.12)' }}
                         >
-                            <span
-                                className="text-white font-semibold text-base"
-                                style={{ fontFamily: 'system-ui,sans-serif' }}
-                            >
-                                Page {angNum}
-                            </span>
-                            <span
-                                className="text-white/25 text-xs"
-                                style={{ fontFamily: 'system-ui,sans-serif' }}
-                            >
+                            <div className="flex items-center gap-3">
+                                <div className="w-2 h-2 rounded-full" style={{ background: 'rgba(212,175,55,0.7)' }} />
+                                <span className="text-base font-semibold" style={{ fontFamily: 'system-ui,sans-serif', color: 'rgba(212,175,55,0.9)' }}>
+                                    Page {angNum}
+                                </span>
+                            </div>
+                            <span className="text-xs" style={{ fontFamily: 'system-ui,sans-serif', color: 'rgba(255,255,255,0.2)' }}>
                                 {angNum} / {MAX_ANG}
                             </span>
                         </div>
 
-                        {/* Card body */}
+                        {/* Card Body */}
                         <div className="px-8 py-7">
                             {loading && (
                                 <div className="flex justify-center py-16">
-                                    <div className="w-8 h-8 rounded-full border-2 border-white/15
-                                                    border-t-white/70 animate-spin" />
+                                    <div className="w-8 h-8 rounded-full border-2 animate-spin"
+                                        style={{ borderColor: 'rgba(212,175,55,0.15)', borderTopColor: 'rgba(212,175,55,0.7)' }} />
                                 </div>
                             )}
 
                             {!loading && error && (
                                 <div className="text-center py-12 space-y-3">
-                                    <p className="text-white/45 text-sm"
-                                        style={{ fontFamily: 'system-ui,sans-serif' }}>
+                                    <p className="text-sm" style={{ fontFamily: 'system-ui,sans-serif', color: 'rgba(255,255,255,0.45)' }}>
                                         {error}
                                     </p>
                                     <button
                                         onClick={() => goToAng(angNum)}
-                                        className="px-4 py-2 rounded-xl text-sm text-white/60
-                                                   border border-white/20 hover:bg-white/10 transition-colors"
-                                        style={{ fontFamily: 'system-ui,sans-serif' }}
+                                        className="px-4 py-2 rounded-xl text-sm transition-colors"
+                                        style={{ fontFamily: 'system-ui,sans-serif', border: '1px solid rgba(255,255,255,0.2)', color: 'rgba(255,255,255,0.6)', background: 'transparent', cursor: 'pointer' }}
                                     >
                                         Retry
                                     </button>
@@ -278,55 +299,66 @@ export default function Reader() {
                             )}
 
                             {!loading && !error && lines.length > 0 && (
-                                <p className="text-white/25 text-xs mb-5 text-right"
-                                    style={{ fontFamily: 'system-ui,sans-serif' }}>
-                                    Tap any line for transliteration
-                                </p>
-                            )}
-
-                            {!loading && !error && lines.length > 0 && (
-                                <div className="divide-y divide-white/[0.06]">
-                                    {lines.map((line, i) => (
-                                        <VerseBlock
-                                            key={line.id ?? i}
-                                            line={line}
-                                            showTrans={showTrans}
-                                            onWordClick={(word) => handleWordClick(line, word)}
-                                        />
-                                    ))}
-                                </div>
+                                <>
+                                    <p className="text-xs mb-6 text-right" style={{ fontFamily: 'system-ui,sans-serif', color: 'rgba(255,255,255,0.2)' }}>
+                                        Tap any line for transliteration
+                                    </p>
+                                    <div style={{ borderTop: '1px solid rgba(255,255,255,0.04)' }}>
+                                        {lines.map((line, i) => (
+                                            <VerseBlock key={line.id ?? i} line={line} showTrans={showTrans} onWordClick={() => handleWordClick(line)} />
+                                        ))}
+                                    </div>
+                                </>
                             )}
                         </div>
 
-                        {/* Card footer */}
+                        {/* Card Footer */}
                         {!loading && lines.length > 0 && (
                             <div
-                                className="px-8 py-4 border-t border-white/10 flex justify-between"
-                                style={{ background: 'rgba(255,255,255,0.03)' }}
+                                className="px-8 py-4 flex justify-between"
+                                style={{ background: 'rgba(212,175,55,0.03)', borderTop: '1px solid rgba(212,175,55,0.1)' }}
                             >
-                                <ToolbarBtn disabled={atStart} onClick={() => goToAng(angNum - 1)}>
+                                <button
+                                    disabled={atStart}
+                                    onClick={() => goToAng(angNum - 1)}
+                                    className="px-5 py-2 rounded-xl text-sm transition-all active:scale-95"
+                                    style={{
+                                        fontFamily: 'system-ui,sans-serif',
+                                        background: 'rgba(212,175,55,0.08)',
+                                        border: '1px solid rgba(212,175,55,0.2)',
+                                        color: atStart ? 'rgba(255,255,255,0.15)' : 'rgba(212,175,55,0.85)',
+                                        cursor: atStart ? 'not-allowed' : 'pointer',
+                                    }}
+                                >
                                     ← Previous Page
-                                </ToolbarBtn>
-                                <ToolbarBtn disabled={atEnd} onClick={() => goToAng(angNum + 1)}>
+                                </button>
+                                <button
+                                    disabled={atEnd}
+                                    onClick={() => goToAng(angNum + 1)}
+                                    className="px-5 py-2 rounded-xl text-sm transition-all active:scale-95"
+                                    style={{
+                                        fontFamily: 'system-ui,sans-serif',
+                                        background: 'rgba(212,175,55,0.08)',
+                                        border: '1px solid rgba(212,175,55,0.2)',
+                                        color: atEnd ? 'rgba(255,255,255,0.15)' : 'rgba(212,175,55,0.85)',
+                                        cursor: atEnd ? 'not-allowed' : 'pointer',
+                                    }}
+                                >
                                     Next Page →
-                                </ToolbarBtn>
+                                </button>
                             </div>
                         )}
                     </div>
                 </div>
-
             </div>
 
-            {/* ── MeaningBox popup ── */}
-            {meaningData && (
-                <MeaningBox
-                    data={meaningData}
-                    onClose={() => setMeaningData(null)}
-                />
-            )}
+            {/* MeaningBox */}
+            {meaningData && <MeaningBox data={meaningData} onClose={() => setMeaningData(null)} />}
         </div>
     );
 }
+
+
 
 // ─── Verse block ──────────────────────────────────────────────────────────────
 function VerseBlock({ line, showTrans, onWordClick }) {

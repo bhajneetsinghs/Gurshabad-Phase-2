@@ -83,7 +83,7 @@ export default function Sections() {
             style={{ paddingTop: '2rem' }}
         >
             {/* Back link */}
-            <Link
+            {/* <Link
                 to="/"
                 className="inline-flex items-center gap-1.5 text-white/45 hover:text-white/80
                    text-sm mb-6 transition-colors duration-150"
@@ -91,7 +91,7 @@ export default function Sections() {
             >
                 <span>←</span>
                 <span>Home</span>
-            </Link>
+            </Link> */}
 
             {/* Raag title */}
             <h1

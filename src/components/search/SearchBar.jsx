@@ -125,8 +125,8 @@ export default function SearchBar({
     }, []);
 
     const placeholder = {
-        '1': 'ਪਹਿਲੇ ਅੱਖਰ…',
-        '2': 'ਗੁਰਬਾਣੀ ਖੋਜ…',
+        '1': 'ਪਹਿਲੇ ਅੱਖਰ ਟਾਈਪ ਕਰੋ…',
+        '2': 'ਗੁਰਬਾਣੀ ਖੋਜ ਕਰੋ…',
         '5': 'ਅੰਗ ਨੰਬਰ…',
     }[searchType] ?? 'Search…';
 
@@ -136,30 +136,40 @@ export default function SearchBar({
         <div ref={wrapRef} className="relative w-full">
             <form
                 onSubmit={handleSubmit}
-                className={`flex flex-row flex-nowrap items-center gap-2
-                   border border-white/18 bg-white/[0.06] backdrop-blur-lg
-                   ${compact ? 'px-2 py-1 rounded-xl' : 'px-4 py-3 rounded-2xl'}`}
+                className="flex flex-row flex-nowrap items-center gap-2 w-full"
+                style={{
+                    background: 'rgba(255,255,255,0.06)',
+                    border: '1px solid rgba(255,255,255,0.12)',
+                    borderRadius: 14,
+                    padding: compact ? '4px 6px' : '8px 10px',
+                }}
             >
+                {/* Select */}
                 <select
                     value={searchType}
                     onChange={handleTypeChange}
                     aria-label="Search type"
-                    className={`flex-none appearance-none border border-white/25 rounded-lg
-                     bg-white/10 text-white focus:outline-none focus:bg-[rgb(0,23,49)]
-                     hover:bg-white/15 cursor-pointer transition-colors
-                     ${compact ? 'px-1.5 py-0.5 text-xs pr-5' : 'px-3 py-2 pr-8 text-sm'}`}
+                    className="flex-none appearance-none focus:outline-none cursor-pointer"
                     style={{
                         fontFamily: UI_FONT,
-                        backgroundImage: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='rgba(255,255,255,.55)'/%3E%3C/svg%3E\")",
+                        background: 'rgba(212,175,55,0.12)',
+                        border: '1px solid rgba(212,175,55,0.3)',
+                        borderRadius: 8,
+                        color: 'rgba(212,175,55,0.95)',
+                        padding: compact ? '3px 20px 3px 6px' : '5px 24px 5px 8px',
+                        fontSize: '0.78rem',
+                        backgroundImage: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='rgba(212,175,55,0.7)'/%3E%3C/svg%3E\")",
                         backgroundRepeat: 'no-repeat',
                         backgroundPosition: 'right 6px center',
+                        maxWidth: 110,
                     }}
                 >
-                    <option value="1">First Letter(Anywhere)</option>
+                    <option value="1">First Letter (Anywhere)</option>
                     <option value="2">Full Word(Gurmukhi)</option>
                     <option value="5">Page No.</option>
                 </select>
 
+                {/* Input */}
                 <input
                     ref={inputRef}
                     type="search"
@@ -173,69 +183,95 @@ export default function SearchBar({
                     dir="ltr"
                     lang={useGurmukhiInput ? 'pa' : 'en'}
                     placeholder={placeholder}
-                    className={`flex-1 min-w-0 border border-white/25 rounded-lg
-                     bg-white/10 text-white placeholder-white/40
-                     focus:outline-none focus:bg-white/14 focus:border-white/45
-                     focus:ring-[3px] focus:ring-white/8 transition-all duration-150
-                     [&::-webkit-search-cancel-button]:appearance-none
-                     [&::-webkit-search-decoration]:hidden
-                     ${compact ? 'px-2 py-0.5 text-xs' : 'px-3 py-2 text-base'}`}
+                    className="flex-1 min-w-0 focus:outline-none
+                               [&::-webkit-search-cancel-button]:appearance-none
+                               [&::-webkit-search-decoration]:hidden"
                     style={{
                         fontFamily: useGurmukhiInput ? GURBANI_FONT : UI_FONT,
+                        fontSize: compact ? '0.75rem' : '0.92rem',
                         letterSpacing: useGurmukhiInput ? '0.15px' : 'normal',
-                        fontSize: compact ? '0.75rem' : useGurmukhiInput ? '1.05rem' : '1rem',
+                        background: 'transparent',
+                        border: 'none',
+                        color: 'rgba(255,255,255,0.92)',
+                        caretColor: 'rgba(212,175,55,0.9)',
+                        padding: '4px 6px',
                     }}
                 />
 
+                {/* Button */}
                 <button
                     type="submit"
-                    className={`flex-none rounded-lg font-medium border border-white/25
-                     bg-white/15 text-white hover:bg-white/24 hover:border-white/45
-                     active:scale-95 transition-all cursor-pointer
-                     ${compact ? 'px-2 py-0.5 text-xs' : 'px-5 py-2 text-sm'}`}
-                    style={{ fontFamily: UI_FONT }}
+                    className="flex-none active:scale-95 transition-all cursor-pointer"
+                    style={{
+                        fontFamily: UI_FONT,
+                        background: 'rgba(212,175,55,0.15)',
+                        border: '1px solid rgba(212,175,55,0.35)',
+                        borderRadius: 8,
+                        color: 'rgba(212,175,55,0.95)',
+                        padding: compact ? '3px 10px' : '5px 14px',
+                        fontSize: '0.82rem',
+                        fontWeight: 500,
+                    }}
                 >
-                    Search
+                    Go
                 </button>
             </form>
 
-            {/* ← hint text now uses hideHint prop */}
+            {/* Hint text */}
             {!hideHint && !compact && searchType === '1' && (
-                <p className="mt-1.5 text-white/25 text-xs text-center"
-                    style={{ fontFamily: GURBANI_FONT }}>
-                    ਹਰ ਸ਼ਬਦ ਦਾ ਪਹਿਲਾ ਅੱਖਰ ਟਾਈਪ ਕਰੋ — ਅੰਗਰੇਜ਼ੀ ਵਿੱਚ ਟਾਈਪ ਕਰੋ, ਗੁਰਮੁਖੀ ਵਿੱਚ ਬਦਲੇਗਾ
+                <p className="mt-2 text-xs text-center"
+                    style={{
+                        fontFamily: GURBANI_FONT,
+                        color: 'rgba(212,175,55,0.35)',
+                    }}>
+                    ਹਰ ਸ਼ਬਦ ਦਾ ਪਹਿਲਾ ਅੱਖਰ ਟਾਈਪ ਕਰੋ — ਅੰਗਰੇਜ਼ੀ ਵਿੱਚ ਟਾਈਪ ਕਰੋ
                 </p>
             )}
             {!hideHint && !compact && searchType === '2' && (
-                <p className="mt-1.5 text-white/25 text-xs text-center"
-                    style={{ fontFamily: GURBANI_FONT }}>
+                <p className="mt-2 text-xs text-center"
+                    style={{
+                        fontFamily: GURBANI_FONT,
+                        color: 'rgba(212,175,55,0.35)',
+                    }}>
                     ਅੰਗਰੇਜ਼ੀ ਵਿੱਚ ਟਾਈਪ ਕਰੋ — ਗੁਰਮੁਖੀ ਵਿੱਚ ਬਦਲੇਗਾ
                 </p>
             )}
 
+            {/* Live dropdown */}
             {!hideDropdown && showDropdown && query.trim().length > 0 && searchType !== '5' && (
                 <div
                     className="absolute left-0 right-0 top-full mt-2 z-50
-                     rounded-2xl border border-white/15 overflow-hidden
-                     shadow-[0_20px_60px_rgba(0,0,0,0.65)]"
+                               rounded-2xl overflow-hidden
+                               shadow-[0_20px_60px_rgba(0,0,0,0.65)]"
                     style={{
                         background: 'rgba(10,13,26,0.97)',
+                        border: '1px solid rgba(212,175,55,0.15)',
                         backdropFilter: 'blur(24px)',
                         WebkitBackdropFilter: 'blur(24px)',
                     }}
                 >
                     {liveLoading && (
                         <div className="flex items-center justify-center gap-2 px-5 py-5">
-                            <div className="w-4 h-4 rounded-full border-2 border-white/20
-                              border-t-white/60 animate-spin" />
-                            <span className="text-white/35 text-sm" style={{ fontFamily: UI_FONT }}>
+                            <div className="w-4 h-4 rounded-full border-2 animate-spin"
+                                style={{
+                                    borderColor: 'rgba(212,175,55,0.2)',
+                                    borderTopColor: 'rgba(212,175,55,0.7)',
+                                }}
+                            />
+                            <span className="text-sm" style={{
+                                fontFamily: UI_FONT,
+                                color: 'rgba(255,255,255,0.35)',
+                            }}>
                                 Searching…
                             </span>
                         </div>
                     )}
                     {!liveLoading && liveResults.length === 0 && (
-                        <p className="px-5 py-5 text-white/35 text-sm text-center"
-                            style={{ fontFamily: GURBANI_FONT }}>
+                        <p className="px-5 py-5 text-sm text-center"
+                            style={{
+                                fontFamily: GURBANI_FONT,
+                                color: 'rgba(255,255,255,0.35)',
+                            }}>
                             ਕੋਈ ਨਤੀਜਾ ਨਹੀਂ ਮਿਲਿਆ
                         </p>
                     )}
@@ -250,24 +286,37 @@ export default function SearchBar({
                                     setShowDropdown(false);
                                     if (ang) navigate(`/reader/${ang}`);
                                 }}
-                                className="w-full text-left px-5 py-3.5
-                           border-b border-white/[0.06] last:border-0
-                           hover:bg-white/[0.07] transition-colors duration-100"
+                                className="w-full text-left px-5 py-3.5 transition-colors duration-100"
+                                style={{
+                                    borderBottom: '1px solid rgba(255,255,255,0.05)',
+                                    background: 'transparent',
+                                }}
+                                onMouseEnter={e => e.currentTarget.style.background = 'rgba(212,175,55,0.06)'}
+                                onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
                             >
-                                <p className="text-white text-sm leading-relaxed truncate mb-0.5"
-                                    style={{ fontFamily: GURBANI_FONT }}>
+                                <p className="text-sm leading-relaxed truncate mb-0.5"
+                                    style={{
+                                        fontFamily: GURBANI_FONT,
+                                        color: 'rgba(255,255,255,0.9)',
+                                    }}>
                                     {gurmukhi}
                                 </p>
                                 <div className="flex items-center justify-between gap-3">
                                     {translit && (
-                                        <p className="text-white/35 text-xs truncate italic"
-                                            style={{ fontFamily: UI_FONT }}>
+                                        <p className="text-xs truncate italic"
+                                            style={{
+                                                fontFamily: UI_FONT,
+                                                color: 'rgba(255,255,255,0.35)',
+                                            }}>
                                             {translit}
                                         </p>
                                     )}
                                     {ang && (
-                                        <span className="flex-none text-white/30 text-xs"
-                                            style={{ fontFamily: GURBANI_FONT }}>
+                                        <span className="flex-none text-xs"
+                                            style={{
+                                                fontFamily: GURBANI_FONT,
+                                                color: 'rgba(212,175,55,0.5)',
+                                            }}>
                                             ਪੰਨਾ {ang}
                                         </span>
                                     )}
