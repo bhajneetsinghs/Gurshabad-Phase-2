@@ -110,7 +110,7 @@ export default function SearchResults() {
                                 const { gurmukhi, ang, lineNo } = parseVerseItem(v);
                                 if (!gurmukhi) return null;
                                 const meta = [
-                                    ang    ? `Ang ${ang}`     : null,
+                                    ang    ? `Page ${ang}`     : null,
                                     lineNo ? `Line ${lineNo}` : null,
                                 ].filter(Boolean).join(' • ');
 
