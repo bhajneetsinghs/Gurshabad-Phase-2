@@ -25,7 +25,7 @@ function romanToGurmukhi(s) {
 
 export default function SearchBar({
     initialQuery = '',
-    initialType = '2',
+    initialType = '1',
     hideDropdown = false,
     compact = false,
     hideHint = false,

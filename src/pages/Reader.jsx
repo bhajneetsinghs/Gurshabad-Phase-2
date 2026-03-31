@@ -23,6 +23,8 @@ export default function Reader() {
     const [showTrans, setShowTrans] = useState(false);
     const [meaningData, setMeaningData] = useState(null);
     const [rawPage, setRawPage] = useState([]);
+    const [liveSuggestions, setLiveSuggestions] = useState([]);
+
     const abortRef = useRef(null);
 
     useEffect(() => {
@@ -67,6 +69,10 @@ export default function Reader() {
         if (!isNaN(n)) goToAng(n);
     }
 
+    const handleLiveResults = (results) => {
+        setLiveSuggestions(results || []);
+    };
+
     useEffect(() => {
         const handleKey = (e) => {
             if (e.target.tagName === 'INPUT') return;
@@ -91,11 +97,11 @@ export default function Reader() {
     return (
         <div className="min-h-screen pt-6">
 
-            {/* Two Column Layout */}
-            <div className="max-w-[min(1200px,95vw)] mx-auto px-4 py-8 grid grid-cols-3 gap-6 items-start">
+            {/* Option 3 Layout: Narrow Search Left + Wide Centered Reader */}
+            <div className="max-w-[min(1200px,95vw)] mx-auto px-4 py-8 grid grid-cols-12 gap-12 items-start">
 
-                {/* Left Column */}
-                <div className="col-span-1 sticky top-24 flex flex-col gap-4">
+                {/* Left Column - Narrow Search (More to the left) */}
+                <div className="col-span-12 lg:col-span-4 xl:col-span-3 sticky top-24">
                     <div
                         className="rounded-2xl overflow-hidden"
                         style={{
@@ -117,14 +123,50 @@ export default function Reader() {
                                 Search Gurbani
                             </p>
                         </div>
-                        <div className="p-3">
-                            <SearchBar hideDropdown hideHint />
+                        <div className="p-4">
+                            {/* Live Suggestions Above Search Bar */}
+                            {liveSuggestions.length > 0 && (
+                                <div
+                                    className="mb-4 rounded-2xl overflow-hidden"
+                                    style={{
+                                        background: 'rgba(15,20,40,0.92)',
+                                        border: '1px solid rgba(255,255,255,0.1)',
+                                        backdropFilter: 'blur(24px)',
+                                    }}
+                                >
+                                    {liveSuggestions.slice(0, 5).map((v, i) => {
+                                        const { gurmukhi, ang, translit } = parseAngData(v) || {};
+                                        if (!gurmukhi) return null;
+                                        return (
+                                            <button
+                                                key={i}
+                                                onClick={() => ang && navigate(`/reader/${ang}`)}
+                                                className="w-full text-left px-5 py-3.5 hover:bg-white/5 transition-colors border-b border-white/10 last:border-none"
+                                            >
+                                                <p style={{
+                                                    fontFamily: GURBANI_FONT,
+                                                    fontSize: '1rem',
+                                                    color: 'rgba(255,255,255,0.9)',
+                                                }}>
+                                                    {gurmukhi}
+                                                </p>
+                                                <div className="flex justify-between text-xs mt-1">
+                                                    {translit && <span className="text-white/40 italic">{translit}</span>}
+                                                    {ang && <span className="text-white/50">ਪੰਨਾ {ang}</span>}
+                                                </div>
+                                            </button>
+                                        );
+                                    })}
+                                </div>
+                            )}
+
+                            <SearchBar hideDropdown hideHint onLiveResults={handleLiveResults} />
                         </div>
                     </div>
                 </div>
 
-                {/* Right Column */}
-                <div className="col-span-2">
+                {/* Right Column - Wide Reader Card (Feels Centered) */}
+                <div className="col-span-12 lg:col-span-8 xl:col-span-9">
                     <div
                         className="w-full rounded-3xl overflow-hidden"
                         style={{
@@ -135,7 +177,7 @@ export default function Reader() {
                             boxShadow: '0 32px 80px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.07)',
                         }}
                     >
-                        {/* ── Card Header: Page label + nav controls + transliteration toggle ── */}
+                        {/* Card Header */}
                         <div
                             className="px-6 py-3 flex items-center gap-3"
                             style={{
@@ -143,7 +185,6 @@ export default function Reader() {
                                 borderBottom: '1px solid rgba(255,255,255,0.07)',
                             }}
                         >
-                            {/* Dot + Page label */}
                             <div className="flex items-center gap-2 flex-none">
                                 <div className="w-2 h-2 rounded-full"
                                     style={{ background: 'rgba(255,255,255,0.35)' }} />
@@ -153,11 +194,9 @@ export default function Reader() {
                                 </span>
                             </div>
 
-                            {/* Divider */}
                             <div className="w-px h-4 flex-none"
                                 style={{ background: 'rgba(255,255,255,0.1)' }} />
 
-                            {/* Prev button */}
                             <button
                                 disabled={atStart}
                                 onClick={() => goToAng(angNum - 1)}
@@ -173,7 +212,6 @@ export default function Reader() {
                                 ← Prev
                             </button>
 
-                            {/* Page jump form */}
                             <form onSubmit={handleSubmit} className="flex items-center gap-1 flex-none">
                                 <input
                                     type="number"
@@ -205,7 +243,6 @@ export default function Reader() {
                                 </button>
                             </form>
 
-                            {/* Next button */}
                             <button
                                 disabled={atEnd}
                                 onClick={() => goToAng(angNum + 1)}
@@ -221,10 +258,8 @@ export default function Reader() {
                                 Next →
                             </button>
 
-                            {/* Spacer */}
                             <div className="flex-1" />
 
-                            {/* Transliteration toggle */}
                             <div className="flex items-center gap-2 flex-none">
                                 <span className="text-xs" style={{ color: 'rgba(255,255,255,0.35)', fontFamily: 'system-ui,sans-serif' }}>
                                     Translit
@@ -244,7 +279,6 @@ export default function Reader() {
                                 </button>
                             </div>
 
-                            {/* Page counter */}
                             <span className="text-xs flex-none"
                                 style={{ fontFamily: 'system-ui,sans-serif', color: 'rgba(255,255,255,0.2)' }}>
                                 {angNum} / {MAX_ANG}
@@ -348,14 +382,12 @@ export default function Reader() {
                 </div>
             </div>
 
-            {/* MeaningBox */}
             {meaningData && <MeaningBox data={meaningData} onClose={() => setMeaningData(null)} />}
         </div>
     );
 }
 
-
-// ─── Verse block ──────────────────────────────────────────────────────────────
+// VerseBlock Component (unchanged)
 function VerseBlock({ line, showTrans, onWordClick }) {
     if (!line.gurmukhi) return null;
     const words = line.gurmukhi.split(' ').filter(Boolean);
@@ -397,44 +429,5 @@ function VerseBlock({ line, showTrans, onWordClick }) {
                 </p>
             )}
         </div>
-    );
-}
-
-// ─── Shared UI ────────────────────────────────────────────────────────────────
-function ToolbarBtn({ children, disabled, onClick, type = 'button' }) {
-    return (
-        <button
-            type={type}
-            disabled={disabled}
-            onClick={onClick}
-            className={[
-                'px-4 py-1.5 rounded-xl text-sm whitespace-nowrap',
-                'border border-white/10 bg-white/[0.06] text-white/60',
-                'hover:bg-white/12 hover:text-white/85 hover:border-white/20',
-                'active:scale-95 transition-all duration-150',
-                disabled ? 'opacity-20 pointer-events-none' : 'cursor-pointer',
-            ].join(' ')}
-            style={{ fontFamily: 'system-ui,sans-serif' }}
-        >
-            {children}
-        </button>
-    );
-}
-
-function ToggleBtn({ children, active, onClick }) {
-    return (
-        <button
-            type="button"
-            onClick={onClick}
-            className={[
-                'px-3 py-1 rounded-full text-xs border transition-all duration-150',
-                active
-                    ? 'bg-white/14 border-white/25 text-white/90'
-                    : 'bg-transparent border-white/10 text-white/30 hover:text-white/50',
-            ].join(' ')}
-            style={{ fontFamily: 'system-ui,sans-serif' }}
-        >
-            {children}
-        </button>
     );
 }
