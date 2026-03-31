@@ -477,6 +477,7 @@ export default function Reader() {
             .then((raw) => {
                 if (ctrl.signal.aborted) return;
                 if (Array.isArray(raw?.page)) setRawPage(raw.page);
+
                 const parsed = parseAngData(raw);
                 if (!parsed.length) setError(`No content found for Ang ${angNum}.`);
                 else setLines(parsed);
@@ -530,15 +531,69 @@ export default function Reader() {
     return (
         <div className="min-h-screen pt-6">
 
-            {/*
-              True-center layout:
-              - Search panel: position:fixed, left edge — completely out of document flow
-              - Reader card: max-width + marginLeft/Right auto = centered on full viewport
-              Because the search is fixed (not in flow), margin:auto on the reader
-              centers it against the full viewport width, not the remaining space.
-            */}
+            {/* Mobile Search Panel - Shown on all screens below xl */}
+            <div className="xl:hidden mb-8 px-4">
+                <div
+                    className="rounded-2xl overflow-hidden"
+                    style={{
+                        background: 'rgba(255,255,255,0.05)',
+                        border: '1px solid rgba(255,255,255,0.1)',
+                        backdropFilter: 'blur(16px)',
+                        WebkitBackdropFilter: 'blur(16px)',
+                        boxShadow: '0 8px 32px rgba(0,0,0,0.35)',
+                    }}
+                >
+                    <div
+                        className="px-4 py-3 flex items-center gap-2"
+                        style={{ borderBottom: '1px solid rgba(255,255,255,0.07)' }}
+                    >
+                        <div className="w-1.5 h-1.5 rounded-full" style={{ background: 'rgba(255,255,255,0.4)' }} />
+                        <p className="text-xs uppercase tracking-widest font-semibold"
+                            style={{ fontFamily: 'system-ui,sans-serif', color: 'rgba(255,255,255,0.5)' }}>
+                            Search Gurbani
+                        </p>
+                    </div>
+                    <div className="p-4">
+                        {liveSuggestions.length > 0 && (
+                            <div
+                                className="mb-4 rounded-2xl overflow-hidden"
+                                style={{
+                                    background: 'rgba(15,20,40,0.92)',
+                                    border: '1px solid rgba(255,255,255,0.1)',
+                                    backdropFilter: 'blur(24px)',
+                                }}
+                            >
+                                {liveSuggestions.slice(0, 5).map((v, i) => {
+                                    const { gurmukhi, ang, translit } = parseAngData(v) || {};
+                                    if (!gurmukhi) return null;
+                                    return (
+                                        <button
+                                            key={i}
+                                            onClick={() => ang && navigate(`/reader/${ang}`)}
+                                            className="w-full text-left px-5 py-3.5 hover:bg-white/5 transition-colors border-b border-white/10 last:border-none"
+                                        >
+                                            <p style={{
+                                                fontFamily: GURBANI_FONT,
+                                                fontSize: '1rem',
+                                                color: 'rgba(255,255,255,0.9)',
+                                            }}>
+                                                {gurmukhi}
+                                            </p>
+                                            <div className="flex justify-between text-xs mt-1">
+                                                {translit && <span className="text-white/40 italic">{translit}</span>}
+                                                {ang && <span className="text-white/50">ਪੰਨਾ {ang}</span>}
+                                            </div>
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                        )}
+                        <SearchBar hideDropdown hideHint onLiveResults={handleLiveResults} />
+                    </div>
+                </div>
+            </div>
 
-            {/* ── FIXED LEFT: Search Panel ── */}
+            {/* Desktop Fixed Left Search Panel */}
             <div
                 className="hidden xl:block"
                 style={{
@@ -559,27 +614,17 @@ export default function Reader() {
                         boxShadow: '0 8px 32px rgba(0,0,0,0.35)',
                     }}
                 >
-                    {/* Panel Header */}
                     <div
                         className="px-4 py-3 flex items-center gap-2"
                         style={{ borderBottom: '1px solid rgba(255,255,255,0.07)' }}
                     >
-                        <div
-                            className="w-1.5 h-1.5 rounded-full"
-                            style={{ background: 'rgba(255,255,255,0.4)' }}
-                        />
-                        <p
-                            className="text-xs uppercase tracking-widest font-semibold"
-                            style={{
-                                fontFamily: 'system-ui,sans-serif',
-                                color: 'rgba(255,255,255,0.5)',
-                            }}
-                        >
+                        <div className="w-1.5 h-1.5 rounded-full" style={{ background: 'rgba(255,255,255,0.4)' }} />
+                        <p className="text-xs uppercase tracking-widest font-semibold"
+                            style={{ fontFamily: 'system-ui,sans-serif', color: 'rgba(255,255,255,0.5)' }}>
                             Search Gurbani
                         </p>
                     </div>
 
-                    {/* Live Suggestions + SearchBar */}
                     <div className="p-4">
                         {liveSuggestions.length > 0 && (
                             <div
@@ -599,22 +644,16 @@ export default function Reader() {
                                             onClick={() => ang && navigate(`/reader/${ang}`)}
                                             className="w-full text-left px-5 py-3.5 hover:bg-white/5 transition-colors border-b border-white/10 last:border-none"
                                         >
-                                            <p
-                                                style={{
-                                                    fontFamily: GURBANI_FONT,
-                                                    fontSize: '1rem',
-                                                    color: 'rgba(255,255,255,0.9)',
-                                                }}
-                                            >
+                                            <p style={{
+                                                fontFamily: GURBANI_FONT,
+                                                fontSize: '1rem',
+                                                color: 'rgba(255,255,255,0.9)',
+                                            }}>
                                                 {gurmukhi}
                                             </p>
                                             <div className="flex justify-between text-xs mt-1">
-                                                {translit && (
-                                                    <span className="text-white/40 italic">{translit}</span>
-                                                )}
-                                                {ang && (
-                                                    <span className="text-white/50">ਪੰਨਾ {ang}</span>
-                                                )}
+                                                {translit && <span className="text-white/40 italic">{translit}</span>}
+                                                {ang && <span className="text-white/50">ਪੰਨਾ {ang}</span>}
                                             </div>
                                         </button>
                                     );
@@ -626,11 +665,11 @@ export default function Reader() {
                 </div>
             </div>
 
-            {/* ── CENTERED READER: margin auto anchors to full viewport ── */}
+            {/* Main Reader Card */}
             <div
                 className="py-8 px-4"
                 style={{
-                    maxWidth: '860px',
+                    maxWidth: '700px',
                     marginLeft: 'auto',
                     marginRight: 'auto',
                 }}
@@ -654,27 +693,15 @@ export default function Reader() {
                         }}
                     >
                         <div className="flex items-center gap-2 flex-none">
-                            <div
-                                className="w-2 h-2 rounded-full"
-                                style={{ background: 'rgba(255,255,255,0.35)' }}
-                            />
-                            <span
-                                className="text-sm font-semibold"
-                                style={{
-                                    fontFamily: 'system-ui,sans-serif',
-                                    color: 'rgba(255,255,255,0.75)',
-                                }}
-                            >
+                            <div className="w-2 h-2 rounded-full" style={{ background: 'rgba(255,255,255,0.35)' }} />
+                            <span className="text-sm font-semibold"
+                                style={{ fontFamily: 'system-ui,sans-serif', color: 'rgba(255,255,255,0.75)' }}>
                                 Page {angNum}
                             </span>
                         </div>
 
-                        <div
-                            className="w-px h-4 flex-none"
-                            style={{ background: 'rgba(255,255,255,0.1)' }}
-                        />
+                        <div className="w-px h-4 flex-none" style={{ background: 'rgba(255,255,255,0.1)' }} />
 
-                        {/* Prev */}
                         <button
                             disabled={atStart}
                             onClick={() => goToAng(angNum - 1)}
@@ -690,7 +717,6 @@ export default function Reader() {
                             ← Prev
                         </button>
 
-                        {/* Go-to Input */}
                         <form onSubmit={handleSubmit} className="flex items-center gap-1 flex-none">
                             <input
                                 type="number"
@@ -722,7 +748,6 @@ export default function Reader() {
                             </button>
                         </form>
 
-                        {/* Next */}
                         <button
                             disabled={atEnd}
                             onClick={() => goToAng(angNum + 1)}
@@ -740,28 +765,17 @@ export default function Reader() {
 
                         <div className="flex-1" />
 
-                        {/* Translit Toggle */}
                         <div className="flex items-center gap-2 flex-none">
-                            <span
-                                className="text-xs"
-                                style={{
-                                    color: 'rgba(255,255,255,0.35)',
-                                    fontFamily: 'system-ui,sans-serif',
-                                }}
-                            >
+                            <span className="text-xs" style={{ color: 'rgba(255,255,255,0.35)', fontFamily: 'system-ui,sans-serif' }}>
                                 Translit
                             </span>
                             <button
                                 onClick={() => setShowTrans(v => !v)}
                                 className="px-2.5 py-1 text-xs rounded-full transition"
                                 style={{
-                                    background: showTrans
-                                        ? 'rgba(255,255,255,0.14)'
-                                        : 'rgba(255,255,255,0.06)',
+                                    background: showTrans ? 'rgba(255,255,255,0.14)' : 'rgba(255,255,255,0.06)',
                                     border: '1px solid rgba(255,255,255,0.12)',
-                                    color: showTrans
-                                        ? 'rgba(255,255,255,0.9)'
-                                        : 'rgba(255,255,255,0.4)',
+                                    color: showTrans ? 'rgba(255,255,255,0.9)' : 'rgba(255,255,255,0.4)',
                                     cursor: 'pointer',
                                     fontFamily: 'system-ui,sans-serif',
                                 }}
@@ -770,13 +784,8 @@ export default function Reader() {
                             </button>
                         </div>
 
-                        <span
-                            className="text-xs flex-none"
-                            style={{
-                                fontFamily: 'system-ui,sans-serif',
-                                color: 'rgba(255,255,255,0.2)',
-                            }}
-                        >
+                        <span className="text-xs flex-none"
+                            style={{ fontFamily: 'system-ui,sans-serif', color: 'rgba(255,255,255,0.2)' }}>
                             {angNum} / {MAX_ANG}
                         </span>
                     </div>
@@ -785,25 +794,18 @@ export default function Reader() {
                     <div className="px-8 py-7">
                         {loading && (
                             <div className="flex justify-center py-16">
-                                <div
-                                    className="w-8 h-8 rounded-full border-2 animate-spin"
+                                <div className="w-8 h-8 rounded-full border-2 animate-spin"
                                     style={{
                                         borderColor: 'rgba(255,255,255,0.08)',
                                         borderTopColor: 'rgba(255,255,255,0.5)',
-                                    }}
-                                />
+                                    }} />
                             </div>
                         )}
 
                         {!loading && error && (
                             <div className="text-center py-12 space-y-3">
-                                <p
-                                    className="text-sm"
-                                    style={{
-                                        fontFamily: 'system-ui,sans-serif',
-                                        color: 'rgba(255,255,255,0.4)',
-                                    }}
-                                >
+                                <p className="text-sm"
+                                    style={{ fontFamily: 'system-ui,sans-serif', color: 'rgba(255,255,255,0.4)' }}>
                                     {error}
                                 </p>
                                 <button
@@ -824,13 +826,8 @@ export default function Reader() {
 
                         {!loading && !error && lines.length > 0 && (
                             <>
-                                <p
-                                    className="text-xs mb-6 text-right"
-                                    style={{
-                                        fontFamily: 'system-ui,sans-serif',
-                                        color: 'rgba(255,255,255,0.2)',
-                                    }}
-                                >
+                                <p className="text-xs mb-6 text-right"
+                                    style={{ fontFamily: 'system-ui,sans-serif', color: 'rgba(255,255,255,0.2)' }}>
                                     Tap any line for transliteration
                                 </p>
                                 <div style={{ borderTop: '1px solid rgba(255,255,255,0.04)' }}>
@@ -889,14 +886,12 @@ export default function Reader() {
                 </div>
             </div>
 
-            {meaningData && (
-                <MeaningBox data={meaningData} onClose={() => setMeaningData(null)} />
-            )}
+            {meaningData && <MeaningBox data={meaningData} onClose={() => setMeaningData(null)} />}
         </div>
     );
 }
 
-// ── VerseBlock Component ──
+// VerseBlock Component (unchanged)
 function VerseBlock({ line, showTrans, onWordClick }) {
     if (!line.gurmukhi) return null;
     const words = line.gurmukhi.split(' ').filter(Boolean);
