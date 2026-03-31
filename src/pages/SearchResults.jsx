@@ -7,29 +7,29 @@ const GURBANI_FONT = "'Noto Sans Gurmukhi','Gurmukhi MN','Kohinoor Gurmukhi',san
 const UI_FONT = 'system-ui,-apple-system,sans-serif';
 
 const SUGGESTIONS = [
-    { label: "ਆਸਾ",     hint: "Raag Asa",         type: "2", q: "ਆਸਾ"     },
-    { label: "ਮਾਝ",     hint: "Raag Maajh",        type: "2", q: "ਮਾਝ"     },
-    { label: "ਗਉੜੀ",    hint: "Raag Gauri",        type: "2", q: "ਗਉੜੀ"    },
-    { label: "ਜਪੁ",     hint: "Japji Sahib",       type: "2", q: "ਜਪੁ"     },
-    { label: "ਸੋਹਿਲਾ",  hint: "Kirtan Sohila",    type: "2", q: "ਸੋਹਿਲਾ"  },
-    { label: "ਅਨੰਦੁ",   hint: "Anand Sahib",       type: "2", q: "ਅਨੰਦੁ"   },
-    { label: "ਸੁਖਮਨੀ",  hint: "Sukhmani Sahib",   type: "2", q: "ਸੁਖਮਨੀ"  },
-    { label: "ਸਾਰੰਗ",   hint: "Raag Sarang",       type: "2", q: "ਸਾਰੰਗ"   },
-    { label: "ਬਿਲਾਵਲ",  hint: "Raag Bilaval",     type: "2", q: "ਬਿਲਾਵਲ"  },
-    { label: "ਰਾਮਕਲੀ",  hint: "Raag Ramkali",     type: "2", q: "ਰਾਮਕਲੀ"  },
+    { label: "ਆਸਾ", hint: "Raag Asa", type: "2", q: "ਆਸਾ" },
+    { label: "ਮਾਝ", hint: "Raag Maajh", type: "2", q: "ਮਾਝ" },
+    { label: "ਗਉੜੀ", hint: "Raag Gauri", type: "2", q: "ਗਉੜੀ" },
+    { label: "ਜਪੁ", hint: "Japji Sahib", type: "2", q: "ਜਪੁ" },
+    { label: "ਸੋਹਿਲਾ", hint: "Kirtan Sohila", type: "2", q: "ਸੋਹਿਲਾ" },
+    { label: "ਅਨੰਦੁ", hint: "Anand Sahib", type: "2", q: "ਅਨੰਦੁ" },
+    { label: "ਸੁਖਮਨੀ", hint: "Sukhmani Sahib", type: "2", q: "ਸੁਖਮਨੀ" },
+    { label: "ਸਾਰੰਗ", hint: "Raag Sarang", type: "2", q: "ਸਾਰੰਗ" },
+    { label: "ਬਿਲਾਵਲ", hint: "Raag Bilaval", type: "2", q: "ਬਿਲਾਵਲ" },
+    { label: "ਰਾਮਕਲੀ", hint: "Raag Ramkali", type: "2", q: "ਰਾਮਕਲੀ" },
 ];
 
 export default function SearchResults() {
     const [searchParams] = useSearchParams();
     const navigate = useNavigate();
 
-    const q    = (searchParams.get('q')    || '').trim();
+    const q = (searchParams.get('q') || '').trim();
     const type = (searchParams.get('type') || '2').toString();
 
     const [results, setResults] = useState([]);
-    const [total,   setTotal]   = useState(null);
+    const [total, setTotal] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [error,   setError]   = useState(null);
+    const [error, setError] = useState(null);
 
     useEffect(() => {
         if (!q) { setLoading(false); return; }
@@ -110,7 +110,7 @@ export default function SearchResults() {
                                 const { gurmukhi, ang, lineNo } = parseVerseItem(v);
                                 if (!gurmukhi) return null;
                                 const meta = [
-                                    ang    ? `Page ${ang}`     : null,
+                                    ang ? `Page ${ang}` : null,
                                     lineNo ? `Line ${lineNo}` : null,
                                 ].filter(Boolean).join(' • ');
 
