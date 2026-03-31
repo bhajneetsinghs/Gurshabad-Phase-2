@@ -362,6 +362,69 @@
                         "youtube": "https://www.youtube.com/watch?v=W9Jb0F-fd8g"
                     }
                 ]
+            },
+            {
+                "id": "Sikhi Concepts",
+                "title": "Sikhi Concepts",
+                "guided": false,
+                "videos": [
+                    {
+                        "title": "Part 1 Guru Nanak's Canvas",
+                        "youtube": "https://www.youtube.com/watch?v=jW5fPKS59go"
+                    },
+                    {
+                        "title": "Part 2 Death",
+                        "youtube": "https://www.youtube.com/watch?v=GdpMMT_f55o"
+                    },
+                    {
+                        "title": "Part 3 After Life",
+                        "youtube": "https://www.youtube.com/watch?v=KTosh6sUe8c"
+                    },
+                    {
+                        "title": "Part 4 8.4 Mil",
+                        "youtube": "https://www.youtube.com/watch?v=xU2-FGcA7eY"
+                    },
+                    {
+                        "title": "Part 5 Reincarnation",
+                        "youtube": "https://www.youtube.com/watch?v=IsrVhGUIIt0"
+                    },
+                    {
+                        "title": "Part 6 Heaven and Hell",
+                        "youtube": "https://www.youtube.com/watch?v=99GZpXPC1Ok"
+                    },
+                    {
+                        "title": "Part 7 Salvation",
+                        "youtube": "https://www.youtube.com/watch?v=3IugplCX4MM"
+                    },
+                    {
+                        "title": "Part 8 Court of Judgement Dargah",
+                        "youtube": "https://www.youtube.com/watch?v=2g6eW8qxa8w"
+                    },
+                    {
+                        "title": "Part 9 Dhrm Raj",
+                        "youtube": "https://www.youtube.com/watch?v=y6_xSqg5i9g"
+                    },
+                    {
+                        "title": "Part 10 Jum & Chitrgupt",
+                        "youtube": "https://www.youtube.com/watch?v=oCmAjm4oSRg"
+                    },
+                    {
+                        "title": "Part 11 Ancestors",
+                        "youtube": "https://www.youtube.com/watch?v=J2ohetid6ZU"
+                    },
+                    {
+                        "title": "Part 12 Applying the Canvas",
+                        "youtube": "https://www.youtube.com/watch?v=jN2MMtuRRLo"
+                    },
+                    {
+                        "title": "Vaheguru",
+                        "youtube": "https://www.youtube.com/watch?v=1PYIIumL9ss"
+                    },
+                    {
+                        "title": "ਵਾਹਿਗੁਰੂ",
+                        "youtube": "https://www.youtube.com/watch?v=tPZttqfyvQE"
+                    }
+                ]
             }
         ]
     }
