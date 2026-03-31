@@ -71,17 +71,9 @@ export default function Reader() {
         const handleKey = (e) => {
             if (e.target.tagName === 'INPUT') return;
             if (meaningData) return;
-
-            if (e.key === 'ArrowLeft') {
-                e.preventDefault();
-                goToAng(angNum - 1);
-            }
-            if (e.key === 'ArrowRight') {
-                e.preventDefault();
-                goToAng(angNum + 1);
-            }
+            if (e.key === 'ArrowLeft') { e.preventDefault(); goToAng(angNum - 1); }
+            if (e.key === 'ArrowRight') { e.preventDefault(); goToAng(angNum + 1); }
         };
-
         window.addEventListener('keydown', handleKey);
         return () => window.removeEventListener('keydown', handleKey);
     }, [angNum, goToAng, meaningData]);
@@ -94,149 +86,34 @@ export default function Reader() {
     }
 
     const atStart = angNum <= MIN_ANG;
-    const atEnd = angNum >= MAX_ANG;
+    const atEnd   = angNum >= MAX_ANG;
 
     return (
         <div className="min-h-screen pt-6">
 
-            {/* Navigation Box */}
-        
-            <div className="w-full max-w-6xl mx-auto mb-6">
-                <div
-                    className="rounded-2xl p-4 flex flex-col gap-4"
-                    style={{
-                        background: 'rgba(255,255,255,0.04)',
-                        border: '1px solid rgba(212,175,55,0.15)',
-                        backdropFilter: 'blur(16px)',
-                    }}
-                >
-                    {/* Top row */}
-                    <div className="flex items-center justify-between">
-                        <p
-                            className="text-xs uppercase tracking-widest"
-                            style={{ color: 'rgba(212,175,55,0.7)' }}
-                        >
-                            Navigation
-                        </p>
-
-                        <span className="text-xs opacity-50">
-                            {angNum} / {MAX_ANG}
-                        </span>
-                    </div>
-
-                    {/* Controls */}
-                    <div className="flex items-center gap-2">
-                        <button
-                            disabled={atStart}
-                            onClick={() => goToAng(angNum - 1)}
-                            className="flex-1 py-2 rounded-xl text-sm transition active:scale-95"
-                            style={{
-                                background: atStart
-                                    ? 'rgba(255,255,255,0.05)'
-                                    : 'rgba(212,175,55,0.12)',
-                                color: atStart
-                                    ? 'rgba(255,255,255,0.3)'
-                                    : 'rgba(212,175,55,0.9)',
-                                border: '1px solid rgba(212,175,55,0.2)',
-                                cursor: atStart ? 'not-allowed' : 'pointer',
-                            }}
-                        >
-                            ← Prev
-                        </button>
-
-                        <form onSubmit={handleSubmit} className="flex gap-2 ">
-                            <input
-                                type="number"
-                                min={MIN_ANG}
-                                max={MAX_ANG}
-                                value={inputVal}
-                                onChange={(e) => setInputVal(e.target.value)}
-                                className="w-full text-center text-sm rounded-xl px-2 py-2 focus:outline-none"
-                                style={{
-                                    background: 'rgba(255,255,255,0.06)',
-                                    border: '1px solid rgba(212,175,55,0.2)',
-                                    color: 'white',
-                                }}
-                            />
-                            <button
-                                type="submit"
-                                className="px-4 py-2 rounded-xl text-sm"
-                                style={{
-                                    background: 'rgba(212,175,55,0.15)',
-                                    border: '1px solid rgba(212,175,55,0.3)',
-                                    color: 'rgba(212,175,55,0.9)',
-                                }}
-                            >
-                                Go
-                            </button>
-                        </form>
-
-                        <button
-                            disabled={atEnd}
-                            onClick={() => goToAng(angNum + 1)}
-                            className="flex-1 py-2 rounded-xl text-sm transition active:scale-95"
-                            style={{
-                                background: atEnd
-                                    ? 'rgba(255,255,255,0.05)'
-                                    : 'rgba(212,175,55,0.12)',
-                                color: atEnd
-                                    ? 'rgba(255,255,255,0.3)'
-                                    : 'rgba(212,175,55,0.9)',
-                                border: '1px solid rgba(212,175,55,0.2)',
-                                cursor: atEnd ? 'not-allowed' : 'pointer',
-                            }}
-                        >
-                            Next →
-                        </button>
-                    </div>
-
-                    {/* Toggle */}
-                    <div className="flex items-center justify-between pt-2 border-t border-white/5">
-                        <span className="text-xs opacity-60">Transliteration</span>
-
-                        <button
-                            onClick={() => setShowTrans(v => !v)}
-                            className="px-3 py-1 text-xs rounded-full transition"
-                            style={{
-                                background: showTrans
-                                    ? 'rgba(212,175,55,0.2)'
-                                    : 'rgba(255,255,255,0.06)',
-                                border: '1px solid rgba(255,255,255,0.1)',
-                                color: showTrans
-                                    ? 'rgba(212,175,55,0.9)'
-                                    : 'rgba(255,255,255,0.5)',
-                            }}
-                        >
-                            {showTrans ? 'On' : 'Off'}
-                        </button>
-                    </div>
-                </div>
-            </div>
-
             {/* Two Column Layout */}
             <div className="max-w-[min(1200px,95vw)] mx-auto px-4 py-8 grid grid-cols-3 gap-6 items-start">
+
                 {/* Left Column */}
                 <div className="col-span-1 sticky top-24 flex flex-col gap-4">
                     <div
                         className="rounded-2xl overflow-hidden"
                         style={{
-                            background: 'rgba(255,255,255,0.07)',
-                            border: '1px solid rgba(212,175,55,0.2)',
-                            boxShadow: '0 8px 32px rgba(0,0,0,0.4)',
+                            background: 'rgba(255,255,255,0.05)',
+                            border: '1px solid rgba(255,255,255,0.1)',
+                            backdropFilter: 'blur(16px)',
+                            WebkitBackdropFilter: 'blur(16px)',
+                            boxShadow: '0 8px 32px rgba(0,0,0,0.35)',
                         }}
                     >
                         <div
                             className="px-4 py-3 flex items-center gap-2"
-                            style={{ borderBottom: '1px solid rgba(212,175,55,0.12)' }}
+                            style={{ borderBottom: '1px solid rgba(255,255,255,0.07)' }}
                         >
-                            <div
-                                className="w-1.5 h-1.5 rounded-full"
-                                style={{ background: 'rgba(212,175,55,0.8)' }}
-                            />
-                            <p
-                                className="text-xs uppercase tracking-widest font-semibold"
-                                style={{ fontFamily: 'system-ui,sans-serif', color: 'rgba(212,175,55,0.8)' }}
-                            >
+                            <div className="w-1.5 h-1.5 rounded-full"
+                                style={{ background: 'rgba(255,255,255,0.4)' }} />
+                            <p className="text-xs uppercase tracking-widest font-semibold"
+                                style={{ fontFamily: 'system-ui,sans-serif', color: 'rgba(255,255,255,0.5)' }}>
                                 Search Gurbani
                             </p>
                         </div>
@@ -252,24 +129,124 @@ export default function Reader() {
                         className="w-full rounded-3xl overflow-hidden"
                         style={{
                             background: 'rgba(255,255,255,0.05)',
-                            border: '1px solid rgba(212,175,55,0.15)',
+                            border: '1px solid rgba(255,255,255,0.1)',
                             backdropFilter: 'blur(24px) saturate(160%)',
                             WebkitBackdropFilter: 'blur(24px) saturate(160%)',
-                            boxShadow: '0 32px 80px rgba(0,0,0,0.55), inset 0 1px 0 rgba(212,175,55,0.08)',
+                            boxShadow: '0 32px 80px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.07)',
                         }}
                     >
-                        {/* Card Header */}
+                        {/* ── Card Header: Page label + nav controls + transliteration toggle ── */}
                         <div
-                            className="px-8 py-4 flex items-center justify-between"
-                            style={{ background: 'rgba(212,175,55,0.05)', borderBottom: '1px solid rgba(212,175,55,0.12)' }}
+                            className="px-6 py-3 flex items-center gap-3"
+                            style={{
+                                background: 'rgba(255,255,255,0.03)',
+                                borderBottom: '1px solid rgba(255,255,255,0.07)',
+                            }}
                         >
-                            <div className="flex items-center gap-3">
-                                <div className="w-2 h-2 rounded-full" style={{ background: 'rgba(212,175,55,0.7)' }} />
-                                <span className="text-base font-semibold" style={{ fontFamily: 'system-ui,sans-serif', color: 'rgba(212,175,55,0.9)' }}>
+                            {/* Dot + Page label */}
+                            <div className="flex items-center gap-2 flex-none">
+                                <div className="w-2 h-2 rounded-full"
+                                    style={{ background: 'rgba(255,255,255,0.35)' }} />
+                                <span className="text-sm font-semibold"
+                                    style={{ fontFamily: 'system-ui,sans-serif', color: 'rgba(255,255,255,0.75)' }}>
                                     Page {angNum}
                                 </span>
                             </div>
-                            <span className="text-xs" style={{ fontFamily: 'system-ui,sans-serif', color: 'rgba(255,255,255,0.2)' }}>
+
+                            {/* Divider */}
+                            <div className="w-px h-4 flex-none"
+                                style={{ background: 'rgba(255,255,255,0.1)' }} />
+
+                            {/* Prev button */}
+                            <button
+                                disabled={atStart}
+                                onClick={() => goToAng(angNum - 1)}
+                                className="flex-none px-3 py-1 rounded-lg text-xs transition-all active:scale-95"
+                                style={{
+                                    background: 'rgba(255,255,255,0.07)',
+                                    border: '1px solid rgba(255,255,255,0.1)',
+                                    color: atStart ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.7)',
+                                    cursor: atStart ? 'not-allowed' : 'pointer',
+                                    fontFamily: 'system-ui,sans-serif',
+                                }}
+                            >
+                                ← Prev
+                            </button>
+
+                            {/* Page jump form */}
+                            <form onSubmit={handleSubmit} className="flex items-center gap-1 flex-none">
+                                <input
+                                    type="number"
+                                    min={MIN_ANG}
+                                    max={MAX_ANG}
+                                    value={inputVal}
+                                    onChange={(e) => setInputVal(e.target.value)}
+                                    className="text-center text-xs rounded-lg px-2 py-1 focus:outline-none"
+                                    style={{
+                                        width: 56,
+                                        background: 'rgba(255,255,255,0.06)',
+                                        border: '1px solid rgba(255,255,255,0.12)',
+                                        color: 'rgba(255,255,255,0.88)',
+                                        fontFamily: 'system-ui,sans-serif',
+                                    }}
+                                />
+                                <button
+                                    type="submit"
+                                    className="px-3 py-1 rounded-lg text-xs transition-all active:scale-95"
+                                    style={{
+                                        background: 'rgba(255,255,255,0.1)',
+                                        border: '1px solid rgba(255,255,255,0.15)',
+                                        color: 'rgba(255,255,255,0.8)',
+                                        cursor: 'pointer',
+                                        fontFamily: 'system-ui,sans-serif',
+                                    }}
+                                >
+                                    Go
+                                </button>
+                            </form>
+
+                            {/* Next button */}
+                            <button
+                                disabled={atEnd}
+                                onClick={() => goToAng(angNum + 1)}
+                                className="flex-none px-3 py-1 rounded-lg text-xs transition-all active:scale-95"
+                                style={{
+                                    background: 'rgba(255,255,255,0.07)',
+                                    border: '1px solid rgba(255,255,255,0.1)',
+                                    color: atEnd ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.7)',
+                                    cursor: atEnd ? 'not-allowed' : 'pointer',
+                                    fontFamily: 'system-ui,sans-serif',
+                                }}
+                            >
+                                Next →
+                            </button>
+
+                            {/* Spacer */}
+                            <div className="flex-1" />
+
+                            {/* Transliteration toggle */}
+                            <div className="flex items-center gap-2 flex-none">
+                                <span className="text-xs" style={{ color: 'rgba(255,255,255,0.35)', fontFamily: 'system-ui,sans-serif' }}>
+                                    Translit
+                                </span>
+                                <button
+                                    onClick={() => setShowTrans(v => !v)}
+                                    className="px-2.5 py-1 text-xs rounded-full transition"
+                                    style={{
+                                        background: showTrans ? 'rgba(255,255,255,0.14)' : 'rgba(255,255,255,0.06)',
+                                        border: '1px solid rgba(255,255,255,0.12)',
+                                        color: showTrans ? 'rgba(255,255,255,0.9)' : 'rgba(255,255,255,0.4)',
+                                        cursor: 'pointer',
+                                        fontFamily: 'system-ui,sans-serif',
+                                    }}
+                                >
+                                    {showTrans ? 'On' : 'Off'}
+                                </button>
+                            </div>
+
+                            {/* Page counter */}
+                            <span className="text-xs flex-none"
+                                style={{ fontFamily: 'system-ui,sans-serif', color: 'rgba(255,255,255,0.2)' }}>
                                 {angNum} / {MAX_ANG}
                             </span>
                         </div>
@@ -279,19 +256,29 @@ export default function Reader() {
                             {loading && (
                                 <div className="flex justify-center py-16">
                                     <div className="w-8 h-8 rounded-full border-2 animate-spin"
-                                        style={{ borderColor: 'rgba(212,175,55,0.15)', borderTopColor: 'rgba(212,175,55,0.7)' }} />
+                                        style={{
+                                            borderColor: 'rgba(255,255,255,0.08)',
+                                            borderTopColor: 'rgba(255,255,255,0.5)',
+                                        }} />
                                 </div>
                             )}
 
                             {!loading && error && (
                                 <div className="text-center py-12 space-y-3">
-                                    <p className="text-sm" style={{ fontFamily: 'system-ui,sans-serif', color: 'rgba(255,255,255,0.45)' }}>
+                                    <p className="text-sm"
+                                        style={{ fontFamily: 'system-ui,sans-serif', color: 'rgba(255,255,255,0.4)' }}>
                                         {error}
                                     </p>
                                     <button
                                         onClick={() => goToAng(angNum)}
                                         className="px-4 py-2 rounded-xl text-sm transition-colors"
-                                        style={{ fontFamily: 'system-ui,sans-serif', border: '1px solid rgba(255,255,255,0.2)', color: 'rgba(255,255,255,0.6)', background: 'transparent', cursor: 'pointer' }}
+                                        style={{
+                                            fontFamily: 'system-ui,sans-serif',
+                                            border: '1px solid rgba(255,255,255,0.15)',
+                                            color: 'rgba(255,255,255,0.55)',
+                                            background: 'transparent',
+                                            cursor: 'pointer',
+                                        }}
                                     >
                                         Retry
                                     </button>
@@ -300,12 +287,18 @@ export default function Reader() {
 
                             {!loading && !error && lines.length > 0 && (
                                 <>
-                                    <p className="text-xs mb-6 text-right" style={{ fontFamily: 'system-ui,sans-serif', color: 'rgba(255,255,255,0.2)' }}>
+                                    <p className="text-xs mb-6 text-right"
+                                        style={{ fontFamily: 'system-ui,sans-serif', color: 'rgba(255,255,255,0.2)' }}>
                                         Tap any line for transliteration
                                     </p>
                                     <div style={{ borderTop: '1px solid rgba(255,255,255,0.04)' }}>
                                         {lines.map((line, i) => (
-                                            <VerseBlock key={line.id ?? i} line={line} showTrans={showTrans} onWordClick={() => handleWordClick(line)} />
+                                            <VerseBlock
+                                                key={line.id ?? i}
+                                                line={line}
+                                                showTrans={showTrans}
+                                                onWordClick={() => handleWordClick(line)}
+                                            />
                                         ))}
                                     </div>
                                 </>
@@ -316,7 +309,10 @@ export default function Reader() {
                         {!loading && lines.length > 0 && (
                             <div
                                 className="px-8 py-4 flex justify-between"
-                                style={{ background: 'rgba(212,175,55,0.03)', borderTop: '1px solid rgba(212,175,55,0.1)' }}
+                                style={{
+                                    background: 'rgba(255,255,255,0.02)',
+                                    borderTop: '1px solid rgba(255,255,255,0.07)',
+                                }}
                             >
                                 <button
                                     disabled={atStart}
@@ -324,9 +320,9 @@ export default function Reader() {
                                     className="px-5 py-2 rounded-xl text-sm transition-all active:scale-95"
                                     style={{
                                         fontFamily: 'system-ui,sans-serif',
-                                        background: 'rgba(212,175,55,0.08)',
-                                        border: '1px solid rgba(212,175,55,0.2)',
-                                        color: atStart ? 'rgba(255,255,255,0.15)' : 'rgba(212,175,55,0.85)',
+                                        background: 'rgba(255,255,255,0.07)',
+                                        border: '1px solid rgba(255,255,255,0.1)',
+                                        color: atStart ? 'rgba(255,255,255,0.15)' : 'rgba(255,255,255,0.75)',
                                         cursor: atStart ? 'not-allowed' : 'pointer',
                                     }}
                                 >
@@ -338,9 +334,9 @@ export default function Reader() {
                                     className="px-5 py-2 rounded-xl text-sm transition-all active:scale-95"
                                     style={{
                                         fontFamily: 'system-ui,sans-serif',
-                                        background: 'rgba(212,175,55,0.08)',
-                                        border: '1px solid rgba(212,175,55,0.2)',
-                                        color: atEnd ? 'rgba(255,255,255,0.15)' : 'rgba(212,175,55,0.85)',
+                                        background: 'rgba(255,255,255,0.07)',
+                                        border: '1px solid rgba(255,255,255,0.1)',
+                                        color: atEnd ? 'rgba(255,255,255,0.15)' : 'rgba(255,255,255,0.75)',
                                         cursor: atEnd ? 'not-allowed' : 'pointer',
                                     }}
                                 >
@@ -359,11 +355,9 @@ export default function Reader() {
 }
 
 
-
 // ─── Verse block ──────────────────────────────────────────────────────────────
 function VerseBlock({ line, showTrans, onWordClick }) {
     if (!line.gurmukhi) return null;
-
     const words = line.gurmukhi.split(' ').filter(Boolean);
 
     return (
@@ -381,8 +375,8 @@ function VerseBlock({ line, showTrans, onWordClick }) {
                     <span key={idx}>
                         <span
                             onClick={() => onWordClick(word)}
-                            className="text-white font-bold cursor-pointer
-                                       hover:text-amber-200 hover:underline
+                            className="text-white/85 font-bold cursor-pointer
+                                       hover:text-white hover:underline
                                        underline-offset-4 decoration-dotted
                                        transition-colors duration-100"
                             title="Click for transliteration"
@@ -396,7 +390,7 @@ function VerseBlock({ line, showTrans, onWordClick }) {
 
             {showTrans && line.translit && (
                 <p
-                    className="text-white/50 text-sm italic mt-1.5 leading-relaxed"
+                    className="text-white/40 text-sm italic mt-1.5 leading-relaxed"
                     style={{ fontFamily: 'system-ui,-apple-system,sans-serif' }}
                 >
                     {line.translit}
@@ -415,8 +409,8 @@ function ToolbarBtn({ children, disabled, onClick, type = 'button' }) {
             onClick={onClick}
             className={[
                 'px-4 py-1.5 rounded-xl text-sm whitespace-nowrap',
-                'border border-white/18 bg-white/[0.07] text-white/70',
-                'hover:bg-white/14 hover:text-white hover:border-white/30',
+                'border border-white/10 bg-white/[0.06] text-white/60',
+                'hover:bg-white/12 hover:text-white/85 hover:border-white/20',
                 'active:scale-95 transition-all duration-150',
                 disabled ? 'opacity-20 pointer-events-none' : 'cursor-pointer',
             ].join(' ')}
@@ -435,8 +429,8 @@ function ToggleBtn({ children, active, onClick }) {
             className={[
                 'px-3 py-1 rounded-full text-xs border transition-all duration-150',
                 active
-                    ? 'bg-white/16 border-white/30 text-white'
-                    : 'bg-transparent border-white/12 text-white/35 hover:text-white/55',
+                    ? 'bg-white/14 border-white/25 text-white/90'
+                    : 'bg-transparent border-white/10 text-white/30 hover:text-white/50',
             ].join(' ')}
             style={{ fontFamily: 'system-ui,sans-serif' }}
         >

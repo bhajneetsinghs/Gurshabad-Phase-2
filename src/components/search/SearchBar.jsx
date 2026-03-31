@@ -25,7 +25,7 @@ function romanToGurmukhi(s) {
 
 export default function SearchBar({
     initialQuery = '',
-    initialType  = '1',
+    initialType  = '2',
     hideDropdown = false,
     compact      = false,
     hideHint     = false,
@@ -138,10 +138,13 @@ export default function SearchBar({
                 onSubmit={handleSubmit}
                 className="flex flex-row flex-nowrap items-center gap-2 w-full"
                 style={{
-                    background: 'rgba(255,255,255,0.06)',
-                    border: '1px solid rgba(255,255,255,0.12)',
+                    background: 'rgba(255,255,255,0.07)',
+                    border: '1px solid rgba(255,255,255,0.11)',
                     borderRadius: 14,
                     padding: compact ? '4px 6px' : '8px 10px',
+                    backdropFilter: 'blur(20px)',
+                    WebkitBackdropFilter: 'blur(20px)',
+                    boxShadow: '0 4px 24px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.07)',
                 }}
             >
                 {/* Select */}
@@ -152,21 +155,21 @@ export default function SearchBar({
                     className="flex-none appearance-none focus:outline-none cursor-pointer"
                     style={{
                         fontFamily: UI_FONT,
-                        background: 'rgba(212,175,55,0.12)',
-                        border: '1px solid rgba(212,175,55,0.3)',
+                        background: 'rgba(255,255,255,0.08)',
+                        border: '1px solid rgba(255,255,255,0.12)',
                         borderRadius: 8,
-                        color: 'rgba(212,175,55,0.95)',
+                        color: 'rgba(255,255,255,0.75)',
                         padding: compact ? '3px 20px 3px 6px' : '5px 24px 5px 8px',
                         fontSize: '0.78rem',
-                        backgroundImage: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='rgba(212,175,55,0.7)'/%3E%3C/svg%3E\")",
+                        backgroundImage: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='rgba(255,255,255,0.4)'/%3E%3C/svg%3E\")",
                         backgroundRepeat: 'no-repeat',
                         backgroundPosition: 'right 6px center',
                         maxWidth: 110,
                     }}
                 >
-                    <option value="1">First Letter (Anywhere)</option>
-                    <option value="2">Full Word(Gurmukhi)</option>
-                    <option value="5">Page No.</option>
+                    <option value="1" style={{ background: '#1a1f35', color: '#fff' }}>First Letter (Anywhere)</option>
+                    <option value="2" style={{ background: '#1a1f35', color: '#fff' }}>Full Word (Gurmukhi)</option>
+                    <option value="5" style={{ background: '#1a1f35', color: '#fff' }}>Page No.</option>
                 </select>
 
                 {/* Input */}
@@ -192,8 +195,8 @@ export default function SearchBar({
                         letterSpacing: useGurmukhiInput ? '0.15px' : 'normal',
                         background: 'transparent',
                         border: 'none',
-                        color: 'rgba(255,255,255,0.92)',
-                        caretColor: 'rgba(212,175,55,0.9)',
+                        color: 'rgba(255,255,255,0.88)',
+                        caretColor: 'rgba(255,255,255,0.6)',
                         padding: '4px 6px',
                     }}
                 />
@@ -204,13 +207,14 @@ export default function SearchBar({
                     className="flex-none active:scale-95 transition-all cursor-pointer"
                     style={{
                         fontFamily: UI_FONT,
-                        background: 'rgba(212,175,55,0.15)',
-                        border: '1px solid rgba(212,175,55,0.35)',
+                        background: 'rgba(255,255,255,0.13)',
+                        border: '1px solid rgba(255,255,255,0.18)',
                         borderRadius: 8,
-                        color: 'rgba(212,175,55,0.95)',
+                        color: 'rgba(255,255,255,0.9)',
                         padding: compact ? '3px 10px' : '5px 14px',
                         fontSize: '0.82rem',
                         fontWeight: 500,
+                        backdropFilter: 'blur(8px)',
                     }}
                 >
                     Go
@@ -222,7 +226,7 @@ export default function SearchBar({
                 <p className="mt-2 text-xs text-center"
                     style={{
                         fontFamily: GURBANI_FONT,
-                        color: 'rgba(212,175,55,0.35)',
+                        color: 'rgba(255,255,255,0.28)',
                     }}>
                     ਹਰ ਸ਼ਬਦ ਦਾ ਪਹਿਲਾ ਅੱਖਰ ਟਾਈਪ ਕਰੋ — ਅੰਗਰੇਜ਼ੀ ਵਿੱਚ ਟਾਈਪ ਕਰੋ
                 </p>
@@ -231,7 +235,7 @@ export default function SearchBar({
                 <p className="mt-2 text-xs text-center"
                     style={{
                         fontFamily: GURBANI_FONT,
-                        color: 'rgba(212,175,55,0.35)',
+                        color: 'rgba(255,255,255,0.28)',
                     }}>
                     ਅੰਗਰੇਜ਼ੀ ਵਿੱਚ ਟਾਈਪ ਕਰੋ — ਗੁਰਮੁਖੀ ਵਿੱਚ ਬਦਲੇਗਾ
                 </p>
@@ -242,10 +246,10 @@ export default function SearchBar({
                 <div
                     className="absolute left-0 right-0 top-full mt-2 z-50
                                rounded-2xl overflow-hidden
-                               shadow-[0_20px_60px_rgba(0,0,0,0.65)]"
+                               shadow-[0_20px_60px_rgba(0,0,0,0.55)]"
                     style={{
-                        background: 'rgba(10,13,26,0.97)',
-                        border: '1px solid rgba(212,175,55,0.15)',
+                        background: 'rgba(15,20,40,0.92)',
+                        border: '1px solid rgba(255,255,255,0.1)',
                         backdropFilter: 'blur(24px)',
                         WebkitBackdropFilter: 'blur(24px)',
                     }}
@@ -254,8 +258,8 @@ export default function SearchBar({
                         <div className="flex items-center justify-center gap-2 px-5 py-5">
                             <div className="w-4 h-4 rounded-full border-2 animate-spin"
                                 style={{
-                                    borderColor: 'rgba(212,175,55,0.2)',
-                                    borderTopColor: 'rgba(212,175,55,0.7)',
+                                    borderColor: 'rgba(255,255,255,0.1)',
+                                    borderTopColor: 'rgba(255,255,255,0.5)',
                                 }}
                             />
                             <span className="text-sm" style={{
@@ -291,13 +295,13 @@ export default function SearchBar({
                                     borderBottom: '1px solid rgba(255,255,255,0.05)',
                                     background: 'transparent',
                                 }}
-                                onMouseEnter={e => e.currentTarget.style.background = 'rgba(212,175,55,0.06)'}
+                                onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.05)'}
                                 onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
                             >
                                 <p className="text-sm leading-relaxed truncate mb-0.5"
                                     style={{
                                         fontFamily: GURBANI_FONT,
-                                        color: 'rgba(255,255,255,0.9)',
+                                        color: 'rgba(255,255,255,0.88)',
                                     }}>
                                     {gurmukhi}
                                 </p>
@@ -306,7 +310,7 @@ export default function SearchBar({
                                         <p className="text-xs truncate italic"
                                             style={{
                                                 fontFamily: UI_FONT,
-                                                color: 'rgba(255,255,255,0.35)',
+                                                color: 'rgba(255,255,255,0.32)',
                                             }}>
                                             {translit}
                                         </p>
@@ -315,7 +319,7 @@ export default function SearchBar({
                                         <span className="flex-none text-xs"
                                             style={{
                                                 fontFamily: GURBANI_FONT,
-                                                color: 'rgba(212,175,55,0.5)',
+                                                color: 'rgba(255,255,255,0.4)',
                                             }}>
                                             ਪੰਨਾ {ang}
                                         </span>
