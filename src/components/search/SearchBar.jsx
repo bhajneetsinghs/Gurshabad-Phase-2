@@ -7,38 +7,38 @@ const UI_FONT = 'system-ui,-apple-system,sans-serif';
 
 const isGurmukhiType = (t) => t === '1' || t === '2';
 
-const DIG = ['੦','੧','੨','੩','੪','੫','੬','੭','੮','੯'];
+const DIG = ['੦', '੧', '੨', '੩', '੪', '੫', '੬', '੭', '੮', '੯'];
 const MAP = {
-  a:'ਅ',b:'ਬ',c:'ਚ',d:'ਦ',e:'ਇ',f:'ਫ',g:'ਗ',h:'ਹ',i:'ਇ',j:'ਜ',
-  k:'ਕ',l:'ਲ',m:'ਮ',n:'ਨ',o:'ਉ',p:'ਪ',q:'ਕ',r:'ਰ',s:'ਸ',t:'ਤ',
-  u:'ਉ',v:'ਵ',w:'ਵ',x:'ਕਸ',y:'ਯ',z:'ਜ਼',
-  A:'ਆ',B:'ਭ',C:'ਛ',D:'ਡ',E:'ਏ',F:'ਫ਼',G:'ਘ',H:'ਃ',I:'ਈ',J:'ਝ',
-  K:'ਖ',L:'ਲ਼',M:'ੰ',N:'ਣ',O:'ਓ',P:'ਫ਼',Q:'ਕ਼',R:'ੜ',S:'ਸ਼',T:'ਟ',
-  U:'ਊ',V:'ਵ',W:'ਵ',X:'ਖ਼',Y:'ਯ',Z:'ਗ਼',
+    a: 'ਅ', b: 'ਬ', c: 'ਚ', d: 'ਦ', e: 'ਇ', f: 'ਫ', g: 'ਗ', h: 'ਹ', i: 'ਇ', j: 'ਜ',
+    k: 'ਕ', l: 'ਲ', m: 'ਮ', n: 'ਨ', o: 'ਉ', p: 'ਪ', q: 'ਕ', r: 'ਰ', s: 'ਸ', t: 'ਤ',
+    u: 'ਉ', v: 'ਵ', w: 'ਵ', x: 'ਕਸ', y: 'ਯ', z: 'ਜ਼',
+    A: 'ਆ', B: 'ਭ', C: 'ਛ', D: 'ਡ', E: 'ਏ', F: 'ਫ਼', G: 'ਘ', H: 'ਃ', I: 'ਈ', J: 'ਝ',
+    K: 'ਖ', L: 'ਲ਼', M: 'ੰ', N: 'ਣ', O: 'ਓ', P: 'ਫ਼', Q: 'ਕ਼', R: 'ੜ', S: 'ਸ਼', T: 'ਟ',
+    U: 'ਊ', V: 'ਵ', W: 'ਵ', X: 'ਖ਼', Y: 'ਯ', Z: 'ਗ਼',
 };
 
 function romanToGurmukhi(s) {
-  return s.replace(/[0-9A-Za-z]/g, ch =>
-    /[0-9]/.test(ch) ? DIG[+ch] : (MAP[ch] || ch)
-  );
+    return s.replace(/[0-9A-Za-z]/g, ch =>
+        /[0-9]/.test(ch) ? DIG[+ch] : (MAP[ch] || ch)
+    );
 }
 
 export default function SearchBar({
     initialQuery = '',
-    initialType  = '1',
+    initialType = '2',
     hideDropdown = false,
-    compact      = false,
-    hideHint     = false,
+    compact = false,
+    hideHint = false,
 }) {
     const navigate = useNavigate();
 
-    const [query,        setQuery]        = useState(initialQuery);
-    const [searchType,   setSearchType]   = useState(initialType);
-    const [liveResults,  setLiveResults]  = useState([]);
-    const [liveLoading,  setLiveLoading]  = useState(false);
+    const [query, setQuery] = useState(initialQuery);
+    const [searchType, setSearchType] = useState(initialType);
+    const [liveResults, setLiveResults] = useState([]);
+    const [liveLoading, setLiveLoading] = useState(false);
     const [showDropdown, setShowDropdown] = useState(false);
 
-    const wrapRef  = useRef(null);
+    const wrapRef = useRef(null);
     const inputRef = useRef(null);
     const abortRef = useRef(null);
     const timerRef = useRef(null);
