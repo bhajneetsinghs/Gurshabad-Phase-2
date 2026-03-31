@@ -84,7 +84,7 @@ export default function Playlist() {
             </h1>
 
             <div
-                className="grid gap-4 mb-6 items-start"
+                className="grid gap-4 mb-6 items-stretch"
                 style={{ gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))" }}
             >
                 {playlist.guided && (

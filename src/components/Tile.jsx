@@ -32,7 +32,7 @@
 
 const VARIANTS = {
     default: {
-        wrapper: "py-4 max-w-[320px]",
+        wrapper: "py-4 max-w-[320px] min-h-[72px]",
         title: "text-base font-semibold",
         border: "border-white/20 hover:border-white/35",
         bg: "bg-white/[0.08] hover:bg-white/[0.14]",
@@ -40,7 +40,7 @@ const VARIANTS = {
     featured: {
         wrapper: "py-8 max-w-none",
         title: "text-xl font-bold",
-        border: "border-amber-400/40 hover:border-amber-400/70",
+        border: "border-blue-400/40 hover:border-blue-400/70",
         bg: "bg-blue-400/[0.08] hover:bg-blue-400/[0.14]",
     },
     playlist: {
