@@ -540,6 +540,7 @@ export default function Reader() {
 
             {/* ── FIXED LEFT: Search Panel ── */}
             <div
+                className="hidden xl:block"
                 style={{
                     position: 'fixed',
                     top: '7.5rem',
