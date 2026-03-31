@@ -61,7 +61,7 @@
             {
                 "id": "understanding-gurbani-methodology",
                 "title": "Understanding Gurbani Methodology",
-                "guided": true,
+                "guided": false,
                 "videos": [
                     {
                         "title": "Crossing Over - Part 1",
@@ -100,7 +100,7 @@
             {
                 "id": "Sidh Goshat",
                 "title": "Sidh Goshat",
-                "guided": true,
+                "guided": false,
                 "videos": [
                     {
                         "title": "Part 1",
@@ -239,7 +239,7 @@
             {
                 "id": "Jup Banee",
                 "title": "Jup Banee",
-                "guided": true,
+                "guided": false,
                 "videos": [
                     {
                         "title": "Part 1",

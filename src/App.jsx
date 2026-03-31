@@ -12,6 +12,7 @@ import FlowMap from "./pages/FlowMap";
 import Sections from "./pages/Sections";   // raag sections page
 import Reader from "./pages/Reader";
 import SearchResults from "./pages/SearchResults";
+import GuidedWalkthrough from "./pages/GuidedWalkthrough"
 
 function App() {
     return (
@@ -35,6 +36,10 @@ function App() {
                     <Route path="/sections/:raag" element={<Sections />} />
                     <Route path="/reader/:ang" element={<Reader />} />
                     <Route path="/search" element={<SearchResults />} />
+                    <Route
+                        path="/courses/channel/:channelId/playlist/:playlistId/guided"
+                        element={<GuidedWalkthrough />}
+                    />
                 </Routes>
             </Layout>
         </BrowserRouter>
