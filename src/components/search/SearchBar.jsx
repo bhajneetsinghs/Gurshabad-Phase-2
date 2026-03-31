@@ -1,4 +1,4 @@
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { parseVerseItem, searchRaw } from '../../services/gurbaniApi';
 
@@ -25,7 +25,7 @@ function romanToGurmukhi(s) {
 
 export default function SearchBar({
     initialQuery = '',
-    initialType  = '2',
+    initialType = '2',
     hideDropdown = false,
     compact = false,
     hideHint = false,
