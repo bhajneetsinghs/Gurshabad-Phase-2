@@ -618,7 +618,7 @@ export default function Reader() {
                 Below xl the sidebar is hidden so we just centre normally.
             */}
             <div
-                className="py-18 px-4"
+                className="py-18 px-14"
                 style={{
                     maxWidth: '800px',
                     width: '100%',
