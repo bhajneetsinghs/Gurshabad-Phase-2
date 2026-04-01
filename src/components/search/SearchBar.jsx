@@ -1341,7 +1341,7 @@ export default function SearchBar({
                     overflow: hidden;
                     background: #0d1226;
                     border: 1px solid rgba(255,255,255,0.1);
-                    max-height: 70vh;
+                    max-height: 65vh;
                     overflow-y: auto;
                     scrollbar-width: thin;
                     scrollbar-color: rgba(255,255,255,0.08) transparent;
