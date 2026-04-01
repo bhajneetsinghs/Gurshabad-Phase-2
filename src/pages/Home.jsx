@@ -20,10 +20,6 @@ export default function Home() {
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        // justifyContent: "center",
-        // gap: 36,
-        // padding: "0 24px 24px",
-
         justifyContent: "flex-start",
         gap: 72,
         padding: "72px 24px 24px",
