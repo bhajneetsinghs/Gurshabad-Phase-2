@@ -1163,14 +1163,14 @@ export default function SearchBar({
         return () => clearTimeout(timerRef.current);
     }, [gurmukhiQuery, searchType, runLive]);
 
-    useEffect(() => {
-        const h = (e) => {
-            if (wrapRef.current && !wrapRef.current.contains(e.target))
-                setShowDropdown(false);
-        };
-        document.addEventListener('mousedown', h);
-        return () => document.removeEventListener('mousedown', h);
-    }, []);
+    // useEffect(() => {
+    //     const h = (e) => {
+    //         if (wrapRef.current && !wrapRef.current.contains(e.target))
+    //             setShowDropdown(false);
+    //     };
+    //     document.addEventListener('mousedown', h);
+    //     return () => document.removeEventListener('mousedown', h);
+    // }, []);
 
     const placeholder = {
         '1': 'e.g. "skgm" → ਸਕਗਮ…',
@@ -1458,11 +1458,12 @@ export default function SearchBar({
                     -webkit-backdrop-filter: blur(10px);
                     background: rgba(10, 13, 26, 0.35);
                     animation: sbFadeIn 0.15s ease;
+                    pointer-events: none; /* ← NEW searchbox disappear feature */
                 }
             `}</style>
 
             {dropdownVisible && (
-                <div className="sb-overlay" onClick={() => setShowDropdown(false)} />
+                <div className="sb-overlay"/>
             )}
 
             <div ref={wrapRef} className="sb-root">
@@ -1476,7 +1477,25 @@ export default function SearchBar({
                             <span className="sb-dd-label" style={{ fontFamily: UI_FONT }}>
                                 Suggestions
                             </span>
-                            {liveLoading && <div className="sb-spinner" />}
+                            {/* {liveLoading && <div className="sb-spinner" />} */}
+                            {/* Added new code for serach box disappear */}
+                            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                                {liveLoading && <div className="sb-spinner" />}
+                                <button
+                                    type="button"
+                                    onClick={() => { setShowDropdown(false); setQuery(''); setLiveResults([]); }}
+                                    style={{
+                                        width: 26, height: 26, borderRadius: '50%',
+                                        border: '1px solid rgba(255,255,255,0.12)',
+                                        background: 'rgba(255,255,255,0.06)',
+                                        color: 'rgba(255,255,255,0.5)',
+                                        cursor: 'pointer', fontSize: '0.75rem',
+                                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                    }}
+                                >
+                                    ✕
+                                </button>
+                            </div>
                         </div>
 
                         {!liveLoading && liveResults.length === 0 && (
