@@ -455,7 +455,7 @@ export default function SearchBar({
                             style={{ fontFamily: UI_FONT }}
                         >
                             <option value="1" style={{ background: '#0d1226', color: '#fff' }}>
-                                First Letter (Anywhere)
+                                First Letter Anywhere(Gurmukhi)
                             </option>
                             <option value="2" style={{ background: '#0d1226', color: '#fff' }}>
                                 Full Word (Gurmukhi)
