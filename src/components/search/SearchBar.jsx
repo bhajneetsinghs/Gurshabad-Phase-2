@@ -1341,7 +1341,7 @@ export default function SearchBar({
                     overflow: hidden;
                     background: #0d1226;
                     border: 1px solid rgba(255,255,255,0.1);
-                    max-height: 70vh;
+                    max-height: 65vh;
                     overflow-y: auto;
                     scrollbar-width: thin;
                     scrollbar-color: rgba(255,255,255,0.08) transparent;
@@ -1536,7 +1536,7 @@ export default function SearchBar({
                                 First Letter (Anywhere)
                             </option>
                             <option value="2" style={{ background: '#0d1226', color: '#fff' }}>
-                                Full Word
+                                Full Word (Gurmukhi)
                             </option>
                             <option value="5" style={{ background: '#0d1226', color: '#fff' }}>
                                 Page No.
