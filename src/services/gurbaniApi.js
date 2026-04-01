@@ -82,19 +82,39 @@ function extractVerses(data) {
  * @param {string} type  - '1' first letter, '2' full word Gurmukhi, '4' romanized
  * @param {string} q     - search query (Gurmukhi for type 1/2, Roman for type 4)
  */
+// export async function searchRaw(type, q) {
+//     if (!q) return { verses: [], total: 0 };
+
+//     // ✅ Correct format from swagger: /search/{query}?searchtype={n}
+//     const path = `/search/${encodeURIComponent(q)}?searchtype=${encodeURIComponent(type)}`;
+
+//     try {
+//         const data = await getWithFallback(path);
+//         const verses = extractVerses(data);
+//         const total = data?.resultsInfo?.totalResults ?? verses.length;
+//         return { verses, total, raw: data };
+//     } catch (err) {
+//         console.error('[searchRaw]', err.message);
+//         return { verses: [], total: 0 };
+//     }
+// }
+
 export async function searchRaw(type, q) {
     if (!q) return { verses: [], total: 0 };
 
-    // ✅ Correct format from swagger: /search/{query}?searchtype={n}
     const path = `/search/${encodeURIComponent(q)}?searchtype=${encodeURIComponent(type)}`;
 
     try {
         const data = await getWithFallback(path);
         const verses = extractVerses(data);
         const total = data?.resultsInfo?.totalResults ?? verses.length;
+
+        // ← ADD THIS temporarily to debug
+        console.log('[searchRaw] query:', q, 'type:', type, 'total:', total, 'raw:', data);
+
         return { verses, total, raw: data };
     } catch (err) {
-        console.error('[searchRaw]', err.message);
+        console.error('[searchRaw] FAILED:', err.message); // ← make sure this is visible
         return { verses: [], total: 0 };
     }
 }
