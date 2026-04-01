@@ -1533,10 +1533,10 @@ export default function SearchBar({
                             style={{ fontFamily: UI_FONT }}
                         >
                             <option value="1" style={{ background: '#0d1226', color: '#fff' }}>
-                                First Letter
+                                First Letter (Anywhere)
                             </option>
                             <option value="2" style={{ background: '#0d1226', color: '#fff' }}>
-                                Full Word
+                                Full Word (Gurmukhi)
                             </option>
                             <option value="5" style={{ background: '#0d1226', color: '#fff' }}>
                                 Page No.
