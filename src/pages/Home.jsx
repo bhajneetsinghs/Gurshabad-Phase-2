@@ -7,7 +7,7 @@ export default function Home() {
 
   function handleNavigate(url) {
     const raagMatch = url.match(/raag=([^&]+)/);
-    const angMatch  = url.match(/ang=([^&]+)/);
+    const angMatch = url.match(/ang=([^&]+)/);
 
     if (raagMatch) navigate(`/sections/${raagMatch[1]}`);
     else if (angMatch) navigate(`/reader/${angMatch[1]}`);
@@ -16,13 +16,17 @@ export default function Home() {
   return (
     <div
       style={{
-        minHeight: "110vh",
+        minHeight: "100vh",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        justifyContent: "center",
-        gap: 36,
-        padding: "0 24px 24px",
+        // justifyContent: "center",
+        // gap: 36,
+        // padding: "0 24px 24px",
+
+        justifyContent: "flex-start",
+        gap: 72,
+        padding: "72px 24px 24px",
       }}
     >
       <RaagCarousel onNavigate={handleNavigate} />
