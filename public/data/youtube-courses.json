@@ -59,6 +59,69 @@
                 ]
             },
             {
+                "id": "Sikhi Concepts",
+                "title": "Sikhi Concepts",
+                "guided": false,
+                "videos": [
+                    {
+                        "title": "Part 1 Guru Nanak's Canvas",
+                        "youtube": "https://www.youtube.com/watch?v=jW5fPKS59go"
+                    },
+                    {
+                        "title": "Part 2 Death",
+                        "youtube": "https://www.youtube.com/watch?v=GdpMMT_f55o"
+                    },
+                    {
+                        "title": "Part 3 After Life",
+                        "youtube": "https://www.youtube.com/watch?v=KTosh6sUe8c"
+                    },
+                    {
+                        "title": "Part 4 8.4 Mil",
+                        "youtube": "https://www.youtube.com/watch?v=xU2-FGcA7eY"
+                    },
+                    {
+                        "title": "Part 5 Reincarnation",
+                        "youtube": "https://www.youtube.com/watch?v=IsrVhGUIIt0"
+                    },
+                    {
+                        "title": "Part 6 Heaven and Hell",
+                        "youtube": "https://www.youtube.com/watch?v=99GZpXPC1Ok"
+                    },
+                    {
+                        "title": "Part 7 Salvation",
+                        "youtube": "https://www.youtube.com/watch?v=3IugplCX4MM"
+                    },
+                    {
+                        "title": "Part 8 Court of Judgement Dargah",
+                        "youtube": "https://www.youtube.com/watch?v=2g6eW8qxa8w"
+                    },
+                    {
+                        "title": "Part 9 Dhrm Raj",
+                        "youtube": "https://www.youtube.com/watch?v=y6_xSqg5i9g"
+                    },
+                    {
+                        "title": "Part 10 Jum & Chitrgupt",
+                        "youtube": "https://www.youtube.com/watch?v=oCmAjm4oSRg"
+                    },
+                    {
+                        "title": "Part 11 Ancestors",
+                        "youtube": "https://www.youtube.com/watch?v=J2ohetid6ZU"
+                    },
+                    {
+                        "title": "Part 12 Applying the Canvas",
+                        "youtube": "https://www.youtube.com/watch?v=jN2MMtuRRLo"
+                    },
+                    {
+                        "title": "Vaheguru",
+                        "youtube": "https://www.youtube.com/watch?v=1PYIIumL9ss"
+                    },
+                    {
+                        "title": "ਵਾਹਿਗੁਰੂ",
+                        "youtube": "https://www.youtube.com/watch?v=tPZttqfyvQE"
+                    }
+                ]
+            },
+            {
                 "id": "understanding-gurbani-methodology",
                 "title": "Understanding Gurbani Methodology",
                 "guided": false,
@@ -94,6 +157,133 @@
                     {
                         "title": "Grammar, Shabd and Consistency. - Part 8",
                         "youtube": "https://www.youtube.com/watch?v=b032Nnn9ouU"
+                    }
+                ]
+            },
+            {
+                "id": "Jup Banee",
+                "title": "Jup Banee",
+                "guided": false,
+                "videos": [
+                    {
+                        "title": "Part 1",
+                        "youtube": "https://www.youtube.com/watch?v=Bbf2OWkpMK4"
+                    },
+                    {
+                        "title": "Part 2",
+                        "youtube": "https://www.youtube.com/watch?v=0XSlLnu6bVw"
+                    },
+                    {
+                        "title": "Part 3",
+                        "youtube": "https://www.youtube.com/watch?v=pYFRIadM63I"
+                    },
+                    {
+                        "title": "Part 4",
+                        "youtube": "https://www.youtube.com/watch?v=PnTfvTqyYhM"
+                    },
+                    {
+                        "title": "Part 5",
+                        "youtube": "https://www.youtube.com/watch?v=z9_jByK276A"
+                    },
+                    {
+                        "title": "Part 6",
+                        "youtube": "https://www.youtube.com/watch?v=AjDjjQTl3CY"
+                    },
+                    {
+                        "title": "Part 7",
+                        "youtube": "https://www.youtube.com/watch?v=kYHGJQgVpjc"
+                    },
+                    {
+                        "title": "Part 8",
+                        "youtube": "https://www.youtube.com/watch?v=u1rTBS0oH-c"
+                    },
+                    {
+                        "title": "Part 9",
+                        "youtube": "https://www.youtube.com/watch?v=vEbsLWDQflE"
+                    },
+                    {
+                        "title": "Part 10",
+                        "youtube": "https://www.youtube.com/watch?v=DOnCl6n1Jj0"
+                    },
+                    {
+                        "title": "Part 11",
+                        "youtube": "https://www.youtube.com/watch?v=rMgf_2bAXSU"
+                    },
+                    {
+                        "title": "Part 12",
+                        "youtube": "https://www.youtube.com/watch?v=glc8BNtxt0Q"
+                    },
+                    {
+                        "title": "Part 13",
+                        "youtube": "https://www.youtube.com/watch?v=OAM69W51OUA"
+                    },
+                    {
+                        "title": "Part 14",
+                        "youtube": "https://www.youtube.com/watch?v=FY1_B6ij23U"
+                    },
+                    {
+                        "title": "Part 15",
+                        "youtube": "https://www.youtube.com/watch?v=eiM1KrbSe-s"
+                    },
+                    {
+                        "title": "Part 16",
+                        "youtube": "https://www.youtube.com/watch?v=vEPLHkN7Cj0"
+                    },
+                    {
+                        "title": "Part 17",
+                        "youtube": "https://www.youtube.com/watch?v=G-YFIC2IoqQ"
+                    },
+                    {
+                        "title": "Part 18",
+                        "youtube": "https://www.youtube.com/watch?v=4QRe_xuC1W8"
+                    },
+                    {
+                        "title": "Part 19",
+                        "youtube": "https://www.youtube.com/watch?v=dCM-qFwsKyg"
+                    },
+                    {
+                        "title": "Part 20",
+                        "youtube": "https://www.youtube.com/watch?v=NN32fHYrJko"
+                    },
+                    {
+                        "title": "Part 21",
+                        "youtube": "https://www.youtube.com/watch?v=rhDuGPWcICc"
+                    },
+                    {
+                        "title": "Part 22",
+                        "youtube": "https://www.youtube.com/watch?v=I5KfFZeKMK8"
+                    },
+                    {
+                        "title": "Part 23",
+                        "youtube": "https://www.youtube.com/watch?v=0L-uYZZZlz0"
+                    },
+                    {
+                        "title": "Part 24",
+                        "youtube": "https://www.youtube.com/watch?v=u7QH0fhZkEM"
+                    },
+                    {
+                        "title": "Part 25",
+                        "youtube": "https://www.youtube.com/watch?v=GgM0KjhoRkM"
+                    },
+                    {
+                        "title": "Part 26",
+                        "youtube": "https://www.youtube.com/watch?v=ZoY2jGuEWXY"
+                    },
+                    {
+                        "title": "Part 27",
+                        "youtube": "https://www.youtube.com/watch?v=6dPipz7W7lw"
+                    },
+                    {
+                        "title": "Part 28",
+                        "youtube": "https://www.youtube.com/watch?v=QWtPbTsngSc"
+                    },
+                    {
+                        "title": "Part 29",
+                        "youtube": "https://www.youtube.com/watch?v=MJ1qG9KYQqs"
+                    },
+                    {
+                        "title": "Part 30",
+                        "youtube": "https://www.youtube.com/watch?v=W9Jb0F-fd8g"
                     }
                 ]
             },
@@ -233,196 +423,6 @@
                     {
                         "title": "Part 33",
                         "youtube": "https://www.youtube.com/watch?v=q8oAb4xFoBY"
-                    }
-                ]
-            },
-            {
-                "id": "Jup Banee",
-                "title": "Jup Banee",
-                "guided": false,
-                "videos": [
-                    {
-                        "title": "Part 1",
-                        "youtube": "https://www.youtube.com/watch?v=Bbf2OWkpMK4"
-                    },
-                    {
-                        "title": "Part 2",
-                        "youtube": "https://www.youtube.com/watch?v=0XSlLnu6bVw"
-                    },
-                    {
-                        "title": "Part 3",
-                        "youtube": "https://www.youtube.com/watch?v=pYFRIadM63I"
-                    },
-                    {
-                        "title": "Part 4",
-                        "youtube": "https://www.youtube.com/watch?v=PnTfvTqyYhM"
-                    },
-                    {
-                        "title": "Part 5",
-                        "youtube": "https://www.youtube.com/watch?v=z9_jByK276A"
-                    },
-                    {
-                        "title": "Part 6",
-                        "youtube": "https://www.youtube.com/watch?v=AjDjjQTl3CY"
-                    },
-                    {
-                        "title": "Part 7",
-                        "youtube": "https://www.youtube.com/watch?v=kYHGJQgVpjc"
-                    },
-                    {
-                        "title": "Part 8",
-                        "youtube": "https://www.youtube.com/watch?v=u1rTBS0oH-c"
-                    },
-                    {
-                        "title": "Part 9",
-                        "youtube": "https://www.youtube.com/watch?v=vEbsLWDQflE"
-                    },
-                    {
-                        "title": "Part 10",
-                        "youtube": "https://www.youtube.com/watch?v=DOnCl6n1Jj0"
-                    },
-                    {
-                        "title": "Part 11",
-                        "youtube": "https://www.youtube.com/watch?v=rMgf_2bAXSU"
-                    },
-                    {
-                        "title": "Part 12",
-                        "youtube": "https://www.youtube.com/watch?v=glc8BNtxt0Q"
-                    },
-                    {
-                        "title": "Part 13",
-                        "youtube": "https://www.youtube.com/watch?v=OAM69W51OUA"
-                    },
-                    {
-                        "title": "Part 14",
-                        "youtube": "https://www.youtube.com/watch?v=FY1_B6ij23U"
-                    },
-                    {
-                        "title": "Part 15",
-                        "youtube": "https://www.youtube.com/watch?v=eiM1KrbSe-s"
-                    },
-                    {
-                        "title": "Part 16",
-                        "youtube": "https://www.youtube.com/watch?v=vEPLHkN7Cj0"
-                    },
-                    {
-                        "title": "Part 17",
-                        "youtube": "https://www.youtube.com/watch?v=G-YFIC2IoqQ"
-                    },
-                    {
-                        "title": "Part 18",
-                        "youtube": "https://www.youtube.com/watch?v=4QRe_xuC1W8"
-                    },
-                    {
-                        "title": "Part 19",
-                        "youtube": "https://www.youtube.com/watch?v=dCM-qFwsKyg"
-                    },
-                    {
-                        "title": "Part 20",
-                        "youtube": "https://www.youtube.com/watch?v=NN32fHYrJko"
-                    },
-                    {
-                        "title": "Part 21",
-                        "youtube": "https://www.youtube.com/watch?v=rhDuGPWcICc"
-                    },
-                    {
-                        "title": "Part 22",
-                        "youtube": "https://www.youtube.com/watch?v=I5KfFZeKMK8"
-                    },
-                    {
-                        "title": "Part 23",
-                        "youtube": "https://www.youtube.com/watch?v=0L-uYZZZlz0"
-                    },
-                    {
-                        "title": "Part 24",
-                        "youtube": "https://www.youtube.com/watch?v=u7QH0fhZkEM"
-                    },
-                    {
-                        "title": "Part 25",
-                        "youtube": "https://www.youtube.com/watch?v=GgM0KjhoRkM"
-                    },
-                    {
-                        "title": "Part 26",
-                        "youtube": "https://www.youtube.com/watch?v=ZoY2jGuEWXY"
-                    },
-                    {
-                        "title": "Part 27",
-                        "youtube": "https://www.youtube.com/watch?v=6dPipz7W7lw"
-                    },
-                    {
-                        "title": "Part 28",
-                        "youtube": "https://www.youtube.com/watch?v=QWtPbTsngSc"
-                    },
-                    {
-                        "title": "Part 29",
-                        "youtube": "https://www.youtube.com/watch?v=MJ1qG9KYQqs"
-                    },
-                    {
-                        "title": "Part 30",
-                        "youtube": "https://www.youtube.com/watch?v=W9Jb0F-fd8g"
-                    }
-                ]
-            },
-            {
-                "id": "Sikhi Concepts",
-                "title": "Sikhi Concepts",
-                "guided": false,
-                "videos": [
-                    {
-                        "title": "Part 1 Guru Nanak's Canvas",
-                        "youtube": "https://www.youtube.com/watch?v=jW5fPKS59go"
-                    },
-                    {
-                        "title": "Part 2 Death",
-                        "youtube": "https://www.youtube.com/watch?v=GdpMMT_f55o"
-                    },
-                    {
-                        "title": "Part 3 After Life",
-                        "youtube": "https://www.youtube.com/watch?v=KTosh6sUe8c"
-                    },
-                    {
-                        "title": "Part 4 8.4 Mil",
-                        "youtube": "https://www.youtube.com/watch?v=xU2-FGcA7eY"
-                    },
-                    {
-                        "title": "Part 5 Reincarnation",
-                        "youtube": "https://www.youtube.com/watch?v=IsrVhGUIIt0"
-                    },
-                    {
-                        "title": "Part 6 Heaven and Hell",
-                        "youtube": "https://www.youtube.com/watch?v=99GZpXPC1Ok"
-                    },
-                    {
-                        "title": "Part 7 Salvation",
-                        "youtube": "https://www.youtube.com/watch?v=3IugplCX4MM"
-                    },
-                    {
-                        "title": "Part 8 Court of Judgement Dargah",
-                        "youtube": "https://www.youtube.com/watch?v=2g6eW8qxa8w"
-                    },
-                    {
-                        "title": "Part 9 Dhrm Raj",
-                        "youtube": "https://www.youtube.com/watch?v=y6_xSqg5i9g"
-                    },
-                    {
-                        "title": "Part 10 Jum & Chitrgupt",
-                        "youtube": "https://www.youtube.com/watch?v=oCmAjm4oSRg"
-                    },
-                    {
-                        "title": "Part 11 Ancestors",
-                        "youtube": "https://www.youtube.com/watch?v=J2ohetid6ZU"
-                    },
-                    {
-                        "title": "Part 12 Applying the Canvas",
-                        "youtube": "https://www.youtube.com/watch?v=jN2MMtuRRLo"
-                    },
-                    {
-                        "title": "Vaheguru",
-                        "youtube": "https://www.youtube.com/watch?v=1PYIIumL9ss"
-                    },
-                    {
-                        "title": "ਵਾਹਿਗੁਰੂ",
-                        "youtube": "https://www.youtube.com/watch?v=tPZttqfyvQE"
                     }
                 ]
             }
