@@ -1,8 +1,4 @@
-// phoneticToGurmukhi.js
-// Converts phonetic Roman/English input to Gurmukhi Unicode for Gurbani search.
-// Convention: 'a' after a consonant = long ā (ਾ), matching common English-speaker intuition.
 
-// Consonants ordered longest-first so digraphs match before singles
 const CONS_MAP = [
     // 3-char
     ['chh', 'ਛ'],
